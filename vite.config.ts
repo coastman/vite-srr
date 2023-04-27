@@ -10,5 +10,18 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    cssCodeSplit: false,
+    sourcemap: true,
+    manifest: true,
+    rollupOptions: {
+      input: {
+        index: 'template.html',
+      },
+    }
+  },
+  ssr: {
+    format: 'cjs'
   }
 })

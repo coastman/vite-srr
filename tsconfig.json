@@ -12,5 +12,13 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs",
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true
+    }
+  },
 }
