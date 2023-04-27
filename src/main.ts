@@ -1,6 +1,8 @@
 import type { CreateAppFunction } from 'vue'
 import { type RouterHistory, createRouter } from 'vue-router'
+import createStore from '@/stores';
 import App from './App.vue'
+
 
 export const createUniversalRouter = (options: any) => {
   const router = createRouter({
@@ -34,14 +36,18 @@ export interface ICreatorContext {
 
 export const createVueApp = (context: ICreatorContext) => {
   const app = context.appCreator(App)
+
+  const pinia = createStore()
   const router = createUniversalRouter({
     history: context.historyCreator()
   })
 
+  app.use(pinia);
   app.use(router);
 
   return {
     app,
-    router
+    router,
+    pinia
   }
 };

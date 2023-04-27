@@ -44,6 +44,7 @@ const createExpressApp = async () => {
         const html = template
         .replace(/<title>[\s\S]*<\/title>/, '')
         .replace(`<!--app-html-->`, () => redered.html)
+        .replace(`</body>`, () => `\n${redered.script}}\n</body>`)
 
         response
           .status(redered.code)
@@ -58,11 +59,13 @@ const createExpressApp = async () => {
     const { renderApp } = await import(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
     app.use('*', async (request, response) => {
       try {
-        const redered = await renderApp(request, manifest)
+        const redered = await renderApp(request, manifest);
+      
         const html = template
         .replace(/<title>[\s\S]*<\/title>/, '')
         .replace(`<!--preload-links-->`, redered.preloadLinks)
         .replace(`<!--app-html-->`, () => redered.html)
+        .replace(`</body>`, () => `\n${redered.script}}\n</body>`)
 
         response
           .status(redered.code)

@@ -1,8 +1,14 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>This is an about page {{ store.count }}</h1>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { useCounterStore } from '@/stores/counter';
+const store = useCounterStore();
+
+</script>
 
 <style>
 @media (min-width: 1024px) {

@@ -60,16 +60,22 @@ function renderPreloadLink(file: any) {
 }
 
 const renderHTML = async (vueApp: any, url: string, manifest: any) => {
-  const { app, router } = vueApp
+  const { app, router, pinia } = vueApp
 
   await router.push(url)
   await router.isReady()
   const ssrContext = {}
+  // pinia.state.value.counter.count++;
   const html = await renderToString(app, ssrContext)
+  const contextData = {
+    store: pinia.state.value
+  }
+  const script = `<script>window.__INITIAL_SSR_CONTEXT__ = '${JSON.stringify(contextData)}'</script>`;
+  const preloadLinks = renderPreloadLinks((ssrContext as any)?.modules, manifest);
 
-  const preloadLinks = renderPreloadLinks((ssrContext as any)?.modules, manifest)
   return {
     html,
+    script,
     preloadLinks
   }
 }
@@ -86,6 +92,6 @@ export const renderApp = async (request: Request, manifest: any): Promise<any> =
       ...rendered
     }
   } catch (error: any) {
-    // 
+    console.log(error);
   }
 }
