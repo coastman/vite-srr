@@ -1,8 +1,9 @@
 import type { CreateAppFunction } from 'vue'
 import { type RouterHistory, createRouter } from 'vue-router'
 import createStore from '@/stores';
+import { createHead, useHead } from '@unhead/vue';
 import App from './App.vue'
-
+import { createTheme, Theme } from './composables/theme';
 
 export const createUniversalRouter = (options: any) => {
   const router = createRouter({
@@ -15,9 +16,6 @@ export const createUniversalRouter = (options: any) => {
       {
         path: '/about',
         name: 'about',
-        // route level code-splitting
-        // this generates a separate chunk (About.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () => import('./views/AboutView.vue')
       }
     ],
@@ -31,23 +29,37 @@ export const createUniversalRouter = (options: any) => {
 
 export interface ICreatorContext {
   appCreator: CreateAppFunction<Element>
-  historyCreator(base?: string): RouterHistory
+  historyCreator(base?: string): RouterHistory,
+  theme: Theme
 }
 
 export const createVueApp = (context: ICreatorContext) => {
   const app = context.appCreator(App)
 
   const pinia = createStore()
+  app.use(pinia);
+
   const router = createUniversalRouter({
     history: context.historyCreator()
   })
-
-  app.use(pinia);
   app.use(router);
+
+  const theme = createTheme(context.theme);
+  app.use(theme);
+
+  const head = createHead();
+  app.use(head);
+  useHead({
+    htmlAttrs: {
+      'class': theme.theme
+    }
+  })
 
   return {
     app,
     router,
-    pinia
+    pinia,
+    head,
+    theme
   }
 };

@@ -2,7 +2,14 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import { useCounterStore } from './stores/counter';
+import { useTheme } from '@/composables/theme';
 const store = useCounterStore();
+const theme = useTheme();
+
+const handleTogggle = () => {
+  store.increment();
+  (theme as any).toogleTheme();
+}
 </script>
 
 <template>
@@ -12,7 +19,7 @@ const store = useCounterStore();
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
       {{ store.count }}
-      <nav @click="store.increment()">
+      <nav @click="handleTogggle">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
@@ -22,10 +29,12 @@ const store = useCounterStore();
   <RouterView />
 </template>
 
-<style scoped>
+<style scoped lang="less">
 header {
   line-height: 1.5;
   max-height: 100vh;
+  // .text-overflow()
+  // background: @red;
 }
 
 .logo {

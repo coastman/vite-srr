@@ -11,6 +11,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  css: {
+    preprocessorOptions: {
+      less: {
+        additionalData: ['@import "@/styles/variables.less";', '@import "@/styles/mixins.less";'].join('')
+      }
+    }
+  },
   build: {
     cssCodeSplit: false,
     sourcemap: true,

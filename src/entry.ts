@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { createServer } from 'vite';
 
 const ROOT_PATH = process.cwd();
@@ -19,6 +20,7 @@ const createExpressApp = async () => {
 
   const app = express();
   app.use(express.static(PUBLIC_PATH));
+  app.use(cookieParser());
   if (isDev) {
     const viteServer = await createServer({
       root: process.cwd(),
@@ -43,6 +45,7 @@ const createExpressApp = async () => {
         const redered = await renderApp(request, manifest)
         const html = template
         .replace(/<title>[\s\S]*<\/title>/, '')
+        .replace(`<html`, () => `<html ${redered.payload.htmlAttrs} `)
         .replace(`<!--app-html-->`, () => redered.html)
         .replace(`</body>`, () => `\n${redered.script}}\n</body>`)
 
@@ -63,6 +66,7 @@ const createExpressApp = async () => {
       
         const html = template
         .replace(/<title>[\s\S]*<\/title>/, '')
+        .replace(`<html`, () => `<html ${redered.payload.htmlAttrs} `)
         .replace(`<!--preload-links-->`, redered.preloadLinks)
         .replace(`<!--app-html-->`, () => redered.html)
         .replace(`</body>`, () => `\n${redered.script}}\n</body>`)

@@ -4,11 +4,14 @@ import { createVueApp } from './main'
 import { createSSRApp } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import { createMemoryHistory } from 'vue-router'
+import { renderSSRHead } from '@unhead/ssr'
+import { Theme } from './composables/theme';
 
 const createApp = (request: Request): any => {
   const app = createVueApp({
     appCreator: createSSRApp,
     historyCreator: createMemoryHistory,
+    theme: request.cookies.theme || Theme.Default
   })
 
   return app
@@ -60,15 +63,16 @@ function renderPreloadLink(file: any) {
 }
 
 const renderHTML = async (vueApp: any, url: string, manifest: any) => {
-  const { app, router, pinia } = vueApp
-
+  const { app, router, pinia, theme, head } = vueApp
+  const payload = await renderSSRHead(head);
   await router.push(url)
   await router.isReady()
   const ssrContext = {}
   // pinia.state.value.counter.count++;
   const html = await renderToString(app, ssrContext)
   const contextData = {
-    store: pinia.state.value
+    store: pinia.state.value,
+    theme: theme.theme.value
   }
   const script = `<script>window.__INITIAL_SSR_CONTEXT__ = '${JSON.stringify(contextData)}'</script>`;
   const preloadLinks = renderPreloadLinks((ssrContext as any)?.modules, manifest);
@@ -76,7 +80,8 @@ const renderHTML = async (vueApp: any, url: string, manifest: any) => {
   return {
     html,
     script,
-    preloadLinks
+    preloadLinks,
+    payload
   }
 }
 
