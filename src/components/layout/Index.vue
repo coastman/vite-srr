@@ -3,8 +3,7 @@
     <app-header />
 
     <main class="main">
-      <div class="left-nenu">
-      </div>
+      <left-menu />
 
       <div class="main-content">
         <router-view />
@@ -23,6 +22,7 @@
 
 <script lang="ts" setup>
   import AppHeader from './Header.vue';
+  import LeftMenu from './LeftMenu.vue';
 
 </script>
 
@@ -34,11 +34,6 @@
     margin: 0 auto;
     margin-top: 20px;
     display: flex;
-
-    .left-nenu {
-      width: 180px;
-      margin-right: 20px;
-    }
 
     .main-content {
       width: 720px;

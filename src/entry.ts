@@ -1,36 +1,34 @@
 import fs from 'fs';
 import path from 'path';
 import express from 'express';
-import compression from 'compression'
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import { createServer, ModuleNode } from 'vite';
 
 const ROOT_PATH = process.cwd();
 const DIST_PATH = path.join(ROOT_PATH, 'dist');
-const PRDO_CLIENT_PATH = path.join(DIST_PATH, 'client')
+const PRDO_CLIENT_PATH = path.join(DIST_PATH, 'client');
 const isDev = process.env.NODE_ENV === 'development';
 const PUBLIC_PATH = isDev ? path.join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
-const PRDO_SERVER_PATH = path.join(DIST_PATH, 'server')
+const PRDO_SERVER_PATH = path.join(DIST_PATH, 'server');
 
 const collectCssUrls = (mods: Set<ModuleNode>, styles: Map<string, string>) => {
   for (const mod of mods) {
     if (mod.ssrModule && mod.file && mod.id) {
-      if (mod.file.endsWith('.css') || mod.file.endsWith('.less') || /\?vue&type=style/.test(mod.id)) {
-        styles.set(mod.url, mod.ssrModule.default)
-      }
+      const hasMod = mod.file.endsWith('.css') || mod.file.endsWith('.less') || /\?vue&type=style/.test(mod.id);
+      if (hasMod) styles.set(mod.url, mod.ssrModule.default);
     }
-    if (mod.importedModules.size > 0) {
-      collectCssUrls(mod.importedModules, styles)
-    }
+
+    if (mod.importedModules.size > 0) collectCssUrls(mod.importedModules, styles);
   }
 }
 
 const createExpressApp = async () => {
   const manifest = !isDev
-  ? JSON.parse(
-      fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'ssr-manifest.json'), 'utf-8'),
-    )
-  : {};
+    ? JSON.parse(
+        fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'ssr-manifest.json'), 'utf-8'),
+      )
+    : {};
 
   const app = express();
   app.use(express.static(PUBLIC_PATH));
@@ -49,57 +47,56 @@ const createExpressApp = async () => {
           interval: 100
         }
       }
-    })
+    });
+
     app.use(viteServer.middlewares);
 
     app.use('*', async (request, response) => {
-      const { renderApp } = await viteServer.ssrLoadModule('/src/ssr.ts')
+      const { renderApp } = await viteServer.ssrLoadModule('/src/ssr.ts');
       const matchedMods = viteServer.moduleGraph.getModulesByFile(path.resolve('src/ssr.ts'));
       const styles: Map<string, string> = new Map();
     
       if (matchedMods) collectCssUrls(matchedMods, styles);
-    
-      const cssLinkTags = [...styles.values()].map((style) => `<style>${style}</style>`).join('\n');
-      
-      let template = fs.readFileSync(path.resolve(ROOT_PATH, 'template.html'), 'utf-8')
+      const cssLinkTags = [...styles.values()].map((style) => `<style class="vite-dev-ssr">${style}</style>`).join('\n');
+      let template = fs.readFileSync(path.resolve(ROOT_PATH, 'template.html'), 'utf-8');
   
       try {
-        const url = request.originalUrl
-        template = await viteServer.transformIndexHtml(url, template)
-        const redered = await renderApp(request, manifest)
+        const url = request.originalUrl;
+        template = await viteServer.transformIndexHtml(url, template);
+        const redered = await renderApp(request, manifest);
         const html = template
-        .replace(/<title>[\s\S]*<\/title>/, '')
-        .replace(`<html`, () => `<html ${redered.payload.htmlAttrs} `)
-        .replace(`<!--app-html-->`, () => redered.html)
-        .replace(`</body>`, () => `\n${redered.script}\n</body>`)
-        .replace(`<!--styles-->`, () => cssLinkTags)
+          .replace(/<title>[\s\S]*<\/title>/, '')
+          .replace(`<html`, () => `<html ${redered.payload.htmlAttrs} `)
+          .replace(`<!--app-html-->`, () => redered.html)
+          .replace(`</body>`, () => `\n${redered.script}\n</body>`)
+          .replace(`<!--styles-->`, () => cssLinkTags);
 
         response
           .status(redered.code)
           .set({ 'Content-Type': 'text/html' })
-          .end(html)
+          .end(html);
       } catch (error) {
         console.log(error);
       }
     })
   } else {
-    const template = fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'template.html'), 'utf-8')
-    const { renderApp } = await import(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
+    const template = fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'template.html'), 'utf-8');
+    const { renderApp } = await import(path.resolve(PRDO_SERVER_PATH, 'ssr.js'));
     app.use('*', async (request, response) => {
       try {
         const redered = await renderApp(request, manifest);
       
         const html = template
-        .replace(/<title>[\s\S]*<\/title>/, '')
-        .replace(`<html`, () => `<html ${redered.payload.htmlAttrs} `)
-        .replace(`<!--preload-links-->`, redered.preloadLinks)
-        .replace(`<!--app-html-->`, () => redered.html)
-        .replace(`</body>`, () => `\n${redered.script}\n</body>`)
+          .replace(/<title>[\s\S]*<\/title>/, '')
+          .replace(`<html`, () => `<html ${redered.payload.htmlAttrs} `)
+          .replace(`<!--preload-links-->`, redered.preloadLinks)
+          .replace(`<!--app-html-->`, () => redered.html)
+          .replace(`</body>`, () => `\n${redered.script}\n</body>`);
 
         response
           .status(redered.code)
           .set({ 'Content-Type': 'text/html' })
-          .end(html)
+          .end(html);
       } catch (error) {
         console.log(error);
       }
@@ -109,9 +106,9 @@ const createExpressApp = async () => {
   return app;
 }
 
-
-createExpressApp().then(app => {
-  app.listen(6173, () => {
-    console.log('http://localhost:6173')
+createExpressApp()
+  .then(app => {
+    app.listen(6173, () => {
+      console.log('http://localhost:6173');
+    });
   });
-});

@@ -75,7 +75,8 @@ const renderHTML = async (vueApp: any, url: string, manifest: any) => {
     store: pinia.state.value,
     theme: theme.theme.value
   }
-  const script = `<script>window.__INITIAL_SSR_CONTEXT__ = '${JSON.stringify(contextData)}'</script>`;
+
+  const script = `<script>window.__INITIAL_SSR_CONTEXT__ = ${JSON.stringify(contextData)}</script>`;
   const preloadLinks = renderPreloadLinks((ssrContext as any)?.modules, manifest);
 
   return {
@@ -87,8 +88,9 @@ const renderHTML = async (vueApp: any, url: string, manifest: any) => {
 }
 
 export const renderApp = async (request: Request, manifest: any): Promise<any> => {
-  const app = createApp(request)
-  const { originalUrl: url } = request
+  const app = createApp(request);
+  const { originalUrl: url } = request;
+  // await app.pinia.stores[url].fetch();
   const SUCCESS_STATUS = 200
 
   try {

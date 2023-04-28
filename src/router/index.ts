@@ -1,5 +1,10 @@
-import { createRouter as _createRouter, createWebHistory, createMemoryHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter as _createRouter, createWebHistory, createMemoryHistory } from 'vue-router';
+const Home = () => import('../views/Home.vue');
+const Detail = () => import('../views/Detail.vue');
+const Code = () => import('../views/Code.vue');
+const Mind = () => import('../views/Mind.vue');
+const Comments = () => import('../views/Comments.vue');
+const Me = () => import('../views/Me.vue');
 
 export const createRouter = () => {
   return _createRouter({
@@ -8,15 +13,32 @@ export const createRouter = () => {
       {
         path: '/',
         name: 'home',
-        component: HomeView
+        component: Home
       },
       {
-        path: '/about',
-        name: 'about',
-        // route level code-splitting
-        // this generates a separate chunk (About.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import('../views/AboutView.vue')
+        path: '/detail',
+        name: 'detail',
+        component: Detail
+      },
+      {
+        path: '/code',
+        name: 'code',
+        component: Code
+      },
+      {
+        path: '/mind',
+        name: 'mind',
+        component: Mind
+      },
+      {
+        path: '/comments',
+        name: 'comments',
+        component: Comments
+      },
+      {
+        path: '/me',
+        name: 'me',
+        component: Me
       }
     ]
   });
