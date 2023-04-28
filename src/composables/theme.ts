@@ -26,6 +26,5 @@ export const createTheme = (initTheme: Theme) => {
   }
 };
 
-export const useTheme = () => {
-  return inject('theme');
-};
+export const useTheme = () => inject('theme') as Omit<ReturnType<typeof createTheme>, 'install'>
+

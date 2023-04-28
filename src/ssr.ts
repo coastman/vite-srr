@@ -54,10 +54,13 @@ function renderPreloadLink(file: any) {
     return ` <link rel="preload" href="${file}" as="image" type="image/jpeg">`
   } else if (file.endsWith('.png')) {
     return ` <link rel="preload" href="${file}" as="image" type="image/png">`
-  } else {
-    // TODO
-    return ''
+  } else if (file.endsWith('.ttf')) {
+    return ` <link rel="preload" href="${file}" as="font" type="font/ttf">`
+  } else if (file.endsWith('.svg')) {
+    return ` <link rel="preload" href="${file}" as="image" type="image/svg+xml">`
   }
+
+  return ''
 }
 
 const renderHTML = async (vueApp: any, url: string, manifest: any) => {

@@ -1,0 +1,63 @@
+.theme(
+    @body-bg, 
+    @header-bg,
+    @header-border,
+    @primary-color,
+    @theme-logo-rotate,
+    @text-color,
+    @module-bg,
+    @article-text-color
+  ) {
+  --body-bg: @body-bg;
+  --header-bg: @header-bg;
+  --header-border: @header-border;
+  --primary-color: @primary-color;
+  --theme-logo-rotate: @theme-logo-rotate;
+  --text-color: @text-color;
+  --module-bg: @module-bg;
+  --article-text-color: @article-text-color;
+}
+
+:root {
+  &.default {
+    .theme(
+      #f2f3f5,
+      #FFF,
+      #f1f1f1,
+      #1e80ff,
+      none,
+      #000,
+      rgba(255, 255, 255, .3),
+      rgba(0, 0, 0, .68)
+    );
+  }
+
+  &.dark {
+    .theme(
+      rgba(0, 0, 0, .92),
+      #000,
+      #000,
+      #FFF,
+      hue-rotate(180deg) brightness(300%) grayscale(100%),
+      #FFF,
+      rgba(0, 0, 0, .3),
+      #f0f0f0
+    );
+  }
+}
+
+body {
+  background: @body-bg;
+  color: @text-color;
+}
+
+a {
+  color: @text-color;
+  opacity: .6;
+  font-size: 14px;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+

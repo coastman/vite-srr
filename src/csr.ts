@@ -3,9 +3,6 @@ import { createSSRApp } from 'vue';
 import { createVueApp } from './main';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
 
-// import './assets/main.css'
-// import './styles/variables.less'
-
 export interface InitialSSRContext {
   theme: Theme
   store?: any
@@ -38,7 +35,6 @@ router.beforeEach((_, __, next) => {
 });
 
 router.afterEach((_, __, failure) => {
-  console.log(failure);
   failure ? app.config.globalProperties.$Progress.fail(failure) : app.config.globalProperties.$Progress.finish()
 })
 

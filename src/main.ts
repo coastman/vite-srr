@@ -4,8 +4,9 @@ import { createHead, useHead } from '@unhead/vue';
 import App from './App.vue'
 import { createTheme, Theme } from './composables/theme';
 import { createRouter } from '@/router';
+import ClientOnly from './components/ClientOnly';
 
-import './assets/main.css';
+import '@/styles/app.less';
 
 export interface ICreatorContext {
   appCreator: CreateAppFunction<Element>
@@ -31,6 +32,8 @@ export const createVueApp = (context: ICreatorContext) => {
       'class': theme.theme
     }
   })
+
+  app.component(ClientOnly.name, ClientOnly);
 
   return {
     app,

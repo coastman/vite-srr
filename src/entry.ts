@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import express from 'express';
+import compression from 'compression'
 import cookieParser from 'cookie-parser';
 import { createServer, ModuleNode } from 'vite';
 
@@ -14,7 +15,7 @@ const PRDO_SERVER_PATH = path.join(DIST_PATH, 'server')
 const collectCssUrls = (mods: Set<ModuleNode>, styles: Map<string, string>) => {
   for (const mod of mods) {
     if (mod.ssrModule && mod.file && mod.id) {
-      if (mod.file.endsWith('.css') || /\?vue&type=style/.test(mod.id)) {
+      if (mod.file.endsWith('.css') || mod.file.endsWith('.less') || /\?vue&type=style/.test(mod.id)) {
         styles.set(mod.url, mod.ssrModule.default)
       }
     }
@@ -34,6 +35,8 @@ const createExpressApp = async () => {
   const app = express();
   app.use(express.static(PUBLIC_PATH));
   app.use(cookieParser());
+  app.use(compression());
+
   if (isDev) {
     const viteServer = await createServer({
       root: process.cwd(),
