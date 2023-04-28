@@ -1,35 +1,14 @@
 import type { CreateAppFunction } from 'vue'
-import { type RouterHistory, createRouter } from 'vue-router'
 import createStore from '@/stores';
 import { createHead, useHead } from '@unhead/vue';
 import App from './App.vue'
 import { createTheme, Theme } from './composables/theme';
+import { createRouter } from '@/router';
 
-export const createUniversalRouter = (options: any) => {
-  const router = createRouter({
-    routes: [
-      {
-        path: '/',
-        name: 'home',
-        component: () => import('./views/HomeView.vue')
-      },
-      {
-        path: '/about',
-        name: 'about',
-        component: () => import('./views/AboutView.vue')
-      }
-    ],
-    strict: true,
-    history: options.history,
-    linkActiveClass: 'link-active',
-  })
-
-  return router;
-}
+import './assets/main.css';
 
 export interface ICreatorContext {
   appCreator: CreateAppFunction<Element>
-  historyCreator(base?: string): RouterHistory,
   theme: Theme
 }
 
@@ -39,9 +18,7 @@ export const createVueApp = (context: ICreatorContext) => {
   const pinia = createStore()
   app.use(pinia);
 
-  const router = createUniversalRouter({
-    history: context.historyCreator()
-  })
+  const router = createRouter()
   app.use(router);
 
   const theme = createTheme(context.theme);

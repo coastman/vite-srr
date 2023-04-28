@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { createServer } from 'vite';
+import { createServer, ModuleNode } from 'vite';
 
 const ROOT_PATH = process.cwd();
 const DIST_PATH = path.join(ROOT_PATH, 'dist');
@@ -10,6 +10,19 @@ const PRDO_CLIENT_PATH = path.join(DIST_PATH, 'client')
 const isDev = process.env.NODE_ENV === 'development';
 const PUBLIC_PATH = isDev ? path.join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
 const PRDO_SERVER_PATH = path.join(DIST_PATH, 'server')
+
+const collectCssUrls = (mods: Set<ModuleNode>, styles: Map<string, string>) => {
+  for (const mod of mods) {
+    if (mod.ssrModule && mod.file && mod.id) {
+      if (mod.file.endsWith('.css') || /\?vue&type=style/.test(mod.id)) {
+        styles.set(mod.url, mod.ssrModule.default)
+      }
+    }
+    if (mod.importedModules.size > 0) {
+      collectCssUrls(mod.importedModules, styles)
+    }
+  }
+}
 
 const createExpressApp = async () => {
   const manifest = !isDev
@@ -35,8 +48,16 @@ const createExpressApp = async () => {
       }
     })
     app.use(viteServer.middlewares);
+
     app.use('*', async (request, response) => {
       const { renderApp } = await viteServer.ssrLoadModule('/src/ssr.ts')
+      const matchedMods = viteServer.moduleGraph.getModulesByFile(path.resolve('src/ssr.ts'));
+      const styles: Map<string, string> = new Map();
+    
+      if (matchedMods) collectCssUrls(matchedMods, styles);
+    
+      const cssLinkTags = [...styles.values()].map((style) => `<style>${style}</style>`).join('\n');
+      
       let template = fs.readFileSync(path.resolve(ROOT_PATH, 'template.html'), 'utf-8')
   
       try {
@@ -47,7 +68,8 @@ const createExpressApp = async () => {
         .replace(/<title>[\s\S]*<\/title>/, '')
         .replace(`<html`, () => `<html ${redered.payload.htmlAttrs} `)
         .replace(`<!--app-html-->`, () => redered.html)
-        .replace(`</body>`, () => `\n${redered.script}}\n</body>`)
+        .replace(`</body>`, () => `\n${redered.script}\n</body>`)
+        .replace(`<!--styles-->`, () => cssLinkTags)
 
         response
           .status(redered.code)
@@ -69,7 +91,7 @@ const createExpressApp = async () => {
         .replace(`<html`, () => `<html ${redered.payload.htmlAttrs} `)
         .replace(`<!--preload-links-->`, redered.preloadLinks)
         .replace(`<!--app-html-->`, () => redered.html)
-        .replace(`</body>`, () => `\n${redered.script}}\n</body>`)
+        .replace(`</body>`, () => `\n${redered.script}\n</body>`)
 
         response
           .status(redered.code)

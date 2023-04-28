@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development tsnd -r tsconfig-paths/register src/entry.ts",
-    "build": "npm run build:client && npm run build:server && tsc --esModuleInterop src/entry.ts --outDir ./dist",
+    "build": "npm run build:client && npm run build:server && tsc --esModuleInterop --downlevelIteration src/entry.ts --outDir ./dist",
     "build:client": "vite build --ssrManifest --outDir dist/client",
     "build:server": "vite build --ssr src/ssr.ts --outDir dist/server",
     "start": "NODE_ENV=production node ./dist/entry.js",

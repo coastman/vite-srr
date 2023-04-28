@@ -22,6 +22,7 @@ export default defineConfig({
     cssCodeSplit: false,
     sourcemap: true,
     manifest: true,
+    cssMinify: true,
     rollupOptions: {
       input: {
         index: 'template.html',

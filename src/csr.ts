@@ -1,21 +1,29 @@
+import { Theme } from './composables/theme';
 import { createSSRApp } from 'vue';
-import { createWebHistory } from 'vue-router';
 import { createVueApp } from './main';
 
-import './assets/main.css'
+// import './assets/main.css'
 // import './styles/variables.less'
 
-import { Theme } from './composables/theme';
+export interface InitialSSRContext {
+  theme: Theme
+  store?: any
+}
 
-const { app, router, pinia } = createVueApp({
-  historyCreator: createWebHistory,
-  appCreator: createSSRApp,
-  // @ts-ignore
-  theme: JSON.parse(window.__INITIAL_SSR_CONTEXT__).theme || Theme.Default
-});
+let initialSSRContext: InitialSSRContext = {
+  theme: Theme.Default,
+  store: null
+};
 
 // @ts-ignore
-if (window.__INITIAL_SSR_CONTEXT__) pinia.state.value = JSON.parse(window.__INITIAL_SSR_CONTEXT__).store;
+if (window.__INITIAL_SSR_CONTEXT__) initialSSRContext = JSON.parse(window.__INITIAL_SSR_CONTEXT__) || {};
+
+const { app, router, pinia } = createVueApp({
+  appCreator: createSSRApp,
+  theme: initialSSRContext.theme || Theme.Default
+});
+
+if (initialSSRContext.store) pinia.state.value = initialSSRContext.store;
 
 router.isReady().then(() => {
   app.mount('#app');

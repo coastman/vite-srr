@@ -3,14 +3,12 @@ import { basename } from 'node:path'
 import { createVueApp } from './main'
 import { createSSRApp } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import { createMemoryHistory } from 'vue-router'
 import { renderSSRHead } from '@unhead/ssr'
 import { Theme } from './composables/theme';
 
 const createApp = (request: Request): any => {
   const app = createVueApp({
     appCreator: createSSRApp,
-    historyCreator: createMemoryHistory,
     theme: request.cookies.theme || Theme.Default
   })
 

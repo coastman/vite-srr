@@ -6,7 +6,6 @@ export enum Theme {
   Dark = 'dark'
 }
 
-
 export const createTheme = (initTheme: Theme) => {
   const theme = ref(initTheme || Theme.Default);
 
@@ -17,11 +16,7 @@ export const createTheme = (initTheme: Theme) => {
 
   const toogleTheme = () => setTheme(theme.value === Theme.Dark ? Theme.Default : Theme.Dark);
 
-  const themeState = {
-    theme,
-    setTheme,
-    toogleTheme,
-  };
+  const themeState = { theme, setTheme, toogleTheme };
 
   return {
     ...themeState,
