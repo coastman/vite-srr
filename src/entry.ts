@@ -76,7 +76,7 @@ const createExpressApp = async () => {
           .set({ 'Content-Type': 'text/html' })
           .end(html)
       } catch (error) {
-        // 
+        console.log(error);
       }
     })
   } else {
@@ -98,7 +98,6 @@ const createExpressApp = async () => {
           .set({ 'Content-Type': 'text/html' })
           .end(html)
       } catch (error) {
-        // 
         console.log(error);
       }
     })

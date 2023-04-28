@@ -3,6 +3,8 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import { useCounterStore } from './stores/counter';
 import { useTheme } from '@/composables/theme';
+import ClientOnly from '@/components/ClientOnly';
+
 const store = useCounterStore();
 const theme = useTheme();
 
@@ -13,6 +15,10 @@ const handleTogggle = () => {
 </script>
 
 <template>
+  <client-only>
+    <vue-progress-bar />
+  </client-only>
+
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
