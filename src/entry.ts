@@ -4,6 +4,7 @@ import express from 'express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import { createServer, ModuleNode } from 'vite';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const ROOT_PATH = process.cwd();
 const DIST_PATH = path.join(ROOT_PATH, 'dist');
@@ -15,7 +16,10 @@ const PRDO_SERVER_PATH = path.join(DIST_PATH, 'server');
 const collectCssUrls = (mods: Set<ModuleNode>, styles: Map<string, string>) => {
   for (const mod of mods) {
     if (mod.ssrModule && mod.file && mod.id) {
-      const hasMod = mod.file.endsWith('.css') || mod.file.endsWith('.less') || /\?vue&type=style/.test(mod.id);
+      const hasMod = mod.file.endsWith('.css') 
+        || mod.file.endsWith('.less') 
+        || /\?vue&type=style/.test(mod.id);
+
       if (hasMod) styles.set(mod.url, mod.ssrModule.default);
     }
 
@@ -51,6 +55,14 @@ const createExpressApp = async () => {
 
     app.use(viteServer.middlewares);
 
+    app.use(
+      '/api', 
+      createProxyMiddleware({
+        target: 'http://localhost:3008',
+        changeOrigin: true,
+      })
+    )
+
     app.use('*', async (request, response) => {
       const { renderApp } = await viteServer.ssrLoadModule('/src/ssr.ts');
       const matchedMods = viteServer.moduleGraph.getModulesByFile(path.resolve('src/ssr.ts'));
@@ -82,6 +94,15 @@ const createExpressApp = async () => {
   } else {
     const template = fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'template.html'), 'utf-8');
     const { renderApp } = await import(path.resolve(PRDO_SERVER_PATH, 'ssr.js'));
+
+    app.use(
+      '/api', 
+      createProxyMiddleware({
+        target: 'http://localhost:3008',
+        changeOrigin: true,
+      })
+    )
+
     app.use('*', async (request, response) => {
       try {
         const redered = await renderApp(request, manifest);
