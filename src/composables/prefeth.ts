@@ -2,7 +2,7 @@ import { onServerPrefetch, onBeforeMount } from 'vue';
 
 export const usePrefetch = (fetch: () => Promise<any>) => {
   if (import.meta.env.SSR) {
-    onServerPrefetch(async() => {
+    onServerPrefetch(async () => {
       await fetch().catch(err => {
         console.log(err);
       });

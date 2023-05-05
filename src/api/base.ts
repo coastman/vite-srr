@@ -20,7 +20,7 @@ http.interceptors.response.use(
   (response: AxiosResponse) => { 
     const { status } = response;
     if (status === 200) return response.data;
-    return response;
+    return response.data;
   },
 
   (err) => Promise.reject(err)

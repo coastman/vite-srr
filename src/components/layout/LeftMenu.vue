@@ -38,22 +38,22 @@ const list = ref([
     link: '/me',
     iconfont: 'icon-wo2'
   },
-  {
-    text: '丹青阁',
-    link: '/list'
-  },
-  {
-    text: '客户端',
-    link: '/list'
-  },
-  {
-    text: '广而告之',
-    link: '/list'
-  },
-  {
-    text: 'hello world',
-    link: '/list'
-  },
+  // {
+  //   text: '丹青阁',
+  //   link: '/list'
+  // },
+  // {
+  //   text: '客户端',
+  //   link: '/list'
+  // },
+  // {
+  //   text: '广而告之',
+  //   link: '/list'
+  // },
+  // {
+  //   text: 'hello world',
+  //   link: '/list'
+  // },
 ]);
 </script>
 

@@ -6,7 +6,11 @@
     @theme-logo-rotate,
     @text-color,
     @module-bg,
-    @article-text-color
+    @article-text-color,
+    @comment-dark-1,
+    @comment-dark-2,
+    @comment-dark-3,
+    @comment-placeholder-color
   ) {
   --body-bg: @body-bg;
   --header-bg: @header-bg;
@@ -16,6 +20,10 @@
   --text-color: @text-color;
   --module-bg: @module-bg;
   --article-text-color: @article-text-color;
+  --comment-dark-1:  @comment-dark-1;
+  --comment-dark-2:  @comment-dark-2;
+  --comment-dark-3:  @comment-dark-3;
+  --comment-placeholder-color:  @comment-placeholder-color;
 }
 
 :root {
@@ -28,7 +36,11 @@
       none,
       #000,
       rgba(255, 255, 255, .3),
-      rgba(0, 0, 0, .68)
+      rgba(0, 0, 0, .68),
+      #f2f3f5,
+      #dedede,
+      #cfcfcf,
+      rgba(0, 0, 0, .38)
     );
   }
 
@@ -41,7 +53,11 @@
       hue-rotate(180deg) brightness(300%) grayscale(100%),
       #FFF,
       #121212,
-      #f0f0f0
+      #f0f0f0,
+      #2d2d2d,
+      #232323,
+      #141414,
+      rgba(240, 240, 240, .38)
     );
   }
 }

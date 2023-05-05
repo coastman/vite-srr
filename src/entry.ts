@@ -33,7 +33,10 @@ const createExpressApp = async () => {
         fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'ssr-manifest.json'), 'utf-8'),
       )
     : {};
-
+  const proxy = createProxyMiddleware({
+    target: 'http://localhost:3008',
+    changeOrigin: true,
+  });
   const app = express();
   app.use(express.static(PUBLIC_PATH));
   app.use(cookieParser());
@@ -55,13 +58,8 @@ const createExpressApp = async () => {
 
     app.use(viteServer.middlewares);
 
-    app.use(
-      '/api', 
-      createProxyMiddleware({
-        target: 'http://localhost:3008',
-        changeOrigin: true,
-      })
-    )
+    app.use('/api', proxy);
+    app.use('/static', proxy);
 
     app.use('*', async (request, response) => {
       const { renderApp } = await viteServer.ssrLoadModule('/src/ssr.ts');
@@ -95,13 +93,8 @@ const createExpressApp = async () => {
     const template = fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'template.html'), 'utf-8');
     const { renderApp } = await import(path.resolve(PRDO_SERVER_PATH, 'ssr.js'));
 
-    app.use(
-      '/api', 
-      createProxyMiddleware({
-        target: 'http://localhost:3008',
-        changeOrigin: true,
-      })
-    )
+    app.use('/api', proxy);
+    app.use('/static', proxy);
 
     app.use('*', async (request, response) => {
       try {

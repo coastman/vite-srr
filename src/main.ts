@@ -7,6 +7,10 @@ import { createRouter } from '@/router';
 import ClientOnly from './components/ClientOnly';
 
 import '@/styles/app.less';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/autoplay';
 
 export interface ICreatorContext {
   appCreator: CreateAppFunction<Element>

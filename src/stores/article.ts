@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import { getArticleList } from '@/api';
+import { ref, type Ref } from 'vue'
+import { getArticleList, getArticleDetail } from '@/api';
 
 export const useArticleStore = defineStore('article', () => {
   const list = ref([]);
+  const detail: Ref<any> = ref({});
   const defaultParams = {
     page: 1,
     pageSize: 8
@@ -13,5 +14,9 @@ export const useArticleStore = defineStore('article', () => {
     list.value = (await getArticleList(params || defaultParams)).data.list;
   };
 
-  return { list, fetch }
+  const fetchDetail = async (id: number) => {
+    detail.value = (await getArticleDetail(id)).data.result;
+  };
+
+  return { list, fetch, fetchDetail, detail }
 });
