@@ -1,0 +1,263 @@
+<template>
+  <div class="comment-item">
+    <div class="avatar">
+      <img src="@/assets/img/default.jpeg" alt="">
+    </div>
+
+    <div class="comment-content">
+      <div class="commentator">{{ commentItem.commentator }}</div>
+      <div class="content">{{ commentItem.content }}</div>
+      <div class="meta">
+        <span class="mr-12"><i class="iconfont icon-shijian"></i>5个月前</span>
+        <button class="mr-12">赞</button>
+        <button class="mr-12">踩</button>
+        <button v-if="!commentItem.relayBoxShow" @click="handleReply">回复</button>
+        <button v-else @click="handleCacelReply(commentItem)">取消回复</button>
+      </div>
+
+      <div class="input-comment" v-if="commentItem.relayBoxShow">
+        <div class="user-info">
+          <input type="text" v-model="commentForm.commentator" placeholder="昵称 *">
+          <input type="text" v-model="commentForm.email" placeholder="邮箱">
+        </div>
+
+        <div class="post-box">
+          <div class="avatar">
+            <img src="@/assets/img/default.jpeg" alt="">
+          </div>
+
+          <div
+            ref="commentInput"
+            contenteditable
+            :class="{
+              'content': true,
+            }"
+            placeholder="请输入你的见解"
+          >
+          </div>
+        </div>
+        <div class="comment-tools">
+          <button class="submit" type="submit" @click="handleConfirm(commentItem)">发 布</button>
+        </div>
+      </div>
+      <div class="reply-list" v-if="commentItem?.children?.length">
+        <div class="reply-item" v-for="(subItem, index) in commentItem.children" :key="index">
+          <div class="comment-box">
+            <div class="avatar">
+              <img src="@/assets/img/default.jpeg" alt="">
+            </div>
+            <div class="comment-content">
+              <div class="commentator">{{ subItem.commentator }}</div>
+              <div class="content">{{ subItem.content }}</div>
+              <div class="meta">
+                <span class="mr-12"><i class="iconfont icon-shijian"></i>5个月前</span>
+                <button class="mr-12">赞</button>
+                <button class="mr-12">踩</button>
+                <button v-if="!(subItem.relayBoxShow && commentItem.replyChild)" @click="handleReplyChild(subItem)">回复</button>
+                <button v-else @click="handleCacelReply(subItem)">取消回复</button>`
+              </div>
+            </div>
+          </div>
+          <div class="input-comment" v-if="subItem.relayBoxShow && commentItem.replyChild">
+            <div class="user-info">
+              <input type="text" v-model="commentForm.commentator" placeholder="昵称 *">
+              <input type="text" v-model="commentForm.email" placeholder="邮箱">
+            </div>
+
+            <div class="post-box">
+              <div class="avatar">
+                <img src="@/assets/img/default.jpeg" alt="">
+              </div>
+
+              <div
+                ref="commentInput"
+                contenteditable
+                :class="{
+                  'content': true,
+                }"
+                placeholder="请输入你的见解"
+              >
+              </div>
+            </div>
+            <div class="comment-tools">
+              <button class="submit" type="submit" @click="handleConfirm(commentItem, subItem)">发 布</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue';
+
+const props = defineProps({
+  commentItem: {
+    type: Object,
+    default: () => {}
+  },
+  commentForm: {
+    type: Object,
+    default: () => {}
+  }
+});
+
+const emit = defineEmits(['handleReply', 'handleReplyChild', 'handleConfirm']);
+const handleReply = () => emit('handleReply');
+const handleCacelReply = (item: any) => {
+  item.relayBoxShow = false;
+};
+
+const commentInput = ref(null);
+const handleReplyChild = (subItem: any) => {
+  (props.commentItem.children || []).forEach((item) => item.relayBoxShow = false);
+  subItem.relayBoxShow = true;
+  emit('handleReplyChild')
+};
+
+const handleConfirm = (item: any, subItem?: any) => {
+  if (subItem) {
+    // eslint-disable-next-line vue/no-mutating-props
+    props.commentForm.content = (commentInput.value as any)[0].innerText
+  } else {
+    // eslint-disable-next-line vue/no-mutating-props
+    props.commentForm.content = (commentInput.value as any).innerText
+  }
+  emit('handleConfirm', item, subItem);
+};
+</script>
+
+<style lang="less" scoped>
+  .comment-item {
+    margin-top: 12px;
+    display: flex;
+
+    .avatar {
+      width: 48px;
+      height: auto;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .comment-content {
+      margin-left: 12px;
+      width: 100%;
+      background-color: @comment-dark-1;
+      padding: 8px 12px;
+      font-size: 14px;
+
+      .commentator {
+        font-weight: bolder;
+        margin-bottom: 14px;
+      }
+
+      > .content {
+        margin-bottom: 14px;
+      }
+
+      .meta {
+        font-size: 12px;
+        .iconfont {
+          font-size: 12px;
+          margin-right: 8px;
+        }
+      }
+
+      .input-comment {
+        margin-top: 20px;
+  
+        input {
+          border: 1px solid @comment-dark-3;
+          border-radius: 1px;
+        }
+
+        .content {
+          border: 1px solid @comment-dark-3;
+          border-radius: 1px;
+        }
+
+        .user-info {
+          margin-bottom: 12px;
+          margin-left: 56px;
+
+          input {
+            background-color: @comment-dark-1;
+            outline: none;
+            padding: 6px 8px;
+            font-size: 14px;
+          }
+
+          input + input {
+            margin-left: 12px;
+          }
+        }
+
+        .post-box {
+          display: flex;
+
+          .avatar {
+            width: 48px;
+            height: auto;
+
+            img {
+              width: 100%;
+            }
+          }
+
+          .content {
+            padding: 8px 12px;
+            margin-left: 12px;
+            // color: #252933;
+            outline: none;
+            box-sizing: border-box;
+            resize: both;
+            background-color: @comment-dark-1;
+            min-height: 90px;
+            max-height: 200px;
+            overflow-y: scroll;
+            width: 100%;
+            font-size: 14px;
+
+            &:empty:before {
+              content: attr(placeholder);
+              color: @comment-placeholder-color;
+              font-size: 14px;
+            }
+
+            &:focus {
+              content: none;
+            }
+          }
+        }
+
+        .comment-tools {
+          height: 30px;
+          background-color: @comment-dark-2;
+          margin-left: 56px;
+
+          .submit {
+            float: right;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            padding: 0px 16px;
+            background-color: @comment-dark-3;
+          }
+        }
+      }
+
+      .reply-list {
+        .reply-item {
+          margin-top: 14px;
+
+          .comment-box {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
+</style>

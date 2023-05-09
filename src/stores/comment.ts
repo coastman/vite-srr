@@ -11,7 +11,6 @@ export const useCommentStore = defineStore('comment', () => {
 
   const addComment = (comment: any) => {
     list.value.unshift(comment);
-    console.log(list.value);
   };
 
   return { list, fetch, addComment }

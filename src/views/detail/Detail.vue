@@ -27,35 +27,23 @@
             }"
             placeholder="请输入你的见解"
             @focus="showUserInfo = true"
-            @input="handleInput"
           >
           </div>
         </div>
         <div class="comment-tools" v-if="showUserInfo">
-          <button class="submit" type="submit" @click="handleConfirm">发 布</button>
+          <button class="submit" type="submit" @click="handleConfirm()">发 布</button>
         </div>
       </div>
 
       <div class="comment-list">
-        <div class="comment-item" v-for="item in commentStore.list" :key="item.id">
-          <div class="avatar">
-            <img src="@/assets/img/default.jpeg" alt="">
-          </div>
-          <div class="comment-content">
-            <div class="header">
-              {{ item.commentator }}
-            </div>
-            <div class="content">
-              {{ item.content }}
-            </div>
-            <div class="meta">
-              <span class="mr-12"><i class="iconfont icon-shijian"></i>5个月前</span>
-              <button class="mr-12">赞</button>
-              <button class="mr-12">踩</button>
-              <button @click="handleReply">回复</button>
-            </div>
-          </div>
-        </div>
+        <comment-item
+          v-for="(item) in commentStore.list" 
+          :key="item.id"
+          :commentItem="item"
+          :commentForm="commentForm"
+          @handleReply="handleReply(item)"
+          @handleReplyChild="handleReplyChild(item)"
+          @handleConfirm="handleConfirm"/>
       </div>
     </div>
   </div>
@@ -64,6 +52,7 @@
 <script lang="ts" setup>
 import { get, set } from '@/helper/storage';
 import { addComment } from '@/api';
+import CommentItem from './components/CommentItem.vue';
 import { ref, reactive, onBeforeMount, type Ref } from 'vue';
 import { useArticleStore } from '@/stores/article';
 import { useCommentStore } from '@/stores/comment';
@@ -120,9 +109,20 @@ const commentForm: ICommentForm = reactive({
 });
 
 const commentInput = ref(null);
-const handleInput = () => {
-  const text = (commentInput?.value as any)?.innerText;
-  commentForm.content = text;
+const handleReply = (comment: any) => {
+  commentStore.list.forEach((item) => { 
+    item.relayBoxShow = false;
+    item.replyChild = false;
+  });
+  comment.relayBoxShow = true;
+};
+
+const handleReplyChild = (comment: any) => {
+  commentStore.list.forEach(item => { 
+    item.replyChild = false;
+    item.relayBoxShow = false;
+  });
+  comment.replyChild = true;
 };
 
 const user: Ref<IUser> = ref({
@@ -136,10 +136,11 @@ onBeforeMount(() => {
   commentForm.commentatorId = user.value.commentatorId;
 });
 
-const handleConfirm = async () => {
+const handleConfirm = async (comment?: any, subComment?: any) => {
+  if (!comment && !subComment) commentForm.content = (commentInput.value as any).innerText;
   const res = await addComment({
     ...commentForm,
-    parentId: 0,
+    parentId: (subComment ? subComment?.id : comment?.id) || 0,
     articleId: currentRoute.params.id
   });
 
@@ -148,12 +149,18 @@ const handleConfirm = async () => {
     commentatorId: res.data.result.commentatorId,
   }));
 
-  commentStore.addComment(res.data.result);
+
+  commentStore.fetch(Number(currentRoute.params.id))
+  // commentStore.addComment(res.data.result);
 };
-const handleReply = () => {};
 </script>
 
 <style lang="less" scoped>
+.children-list {
+  .children-item {
+    margin-top: 20px;
+  }
+}
 .mr-12 {
   margin-right: 12px;
 }
@@ -264,44 +271,8 @@ const handleReply = () => {};
   .comment-list {
     margin-top: 12px;
 
-    .comment-item {
-      display: flex;
-
-      .avatar {
-        width: 48px;
-        height: auto;
-
-        img {
-          width: 100%;
-        }
-      }
-
-      .comment-content {
-        margin-left: 12px;
-        width: 100%;
-        background-color: @comment-dark-1;
-        padding: 8px 12px;
-        font-size: 14px;
-
-        .header {
-          font-weight: bolder;
-          margin-bottom: 14px;
-        }
-        .content {
-          margin-bottom: 14px;
-        }
-        .meta {
-          font-size: 12px;
-          .iconfont {
-            font-size: 12px;
-            margin-right: 8px;
-          }
-        }
-      }
-
-      &:not(:first-child) {
-        margin-top: 12px;
-      }
+    &-item {
+      margin-top: 12px;
     }
   }
 }

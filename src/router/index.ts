@@ -1,6 +1,6 @@
 import { createRouter as _createRouter, createWebHistory, createMemoryHistory } from 'vue-router';
 const Home = () => import('../views/Home.vue');
-const Detail = () => import('../views/Detail.vue');
+const Detail = () => import('../views/detail/Detail.vue');
 const Code = () => import('../views/Code.vue');
 const Mind = () => import('../views/Mind.vue');
 const Comments = () => import('../views/Comments.vue');

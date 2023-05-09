@@ -120,9 +120,8 @@ const createExpressApp = async () => {
   return app;
 }
 
-createExpressApp()
-  .then(app => {
-    app.listen(6173, () => {
-      console.log('http://localhost:6173');
-    });
+createExpressApp().then(app => {
+  app.listen(6173, () => {
+    console.log('http://localhost:6173');
   });
+});
