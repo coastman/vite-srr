@@ -118,7 +118,7 @@ const handleReply = (comment: any) => {
 };
 
 const handleReplyChild = (comment: any) => {
-  commentStore.list.forEach(item => { 
+  commentStore.list.forEach((item) => { 
     item.replyChild = false;
     item.relayBoxShow = false;
   });
@@ -137,7 +137,10 @@ onBeforeMount(() => {
 });
 
 const handleConfirm = async (comment?: any, subComment?: any) => {
-  if (!comment && !subComment) commentForm.content = (commentInput.value as any).innerText;
+  if (!comment && !subComment) { 
+    commentForm.content = (commentInput.value as any).innerText;
+    (commentInput.value as any).innerText = '';
+  }
   const res = await addComment({
     ...commentForm,
     parentId: (subComment ? subComment?.id : comment?.id) || 0,
@@ -149,9 +152,7 @@ const handleConfirm = async (comment?: any, subComment?: any) => {
     commentatorId: res.data.result.commentatorId,
   }));
 
-
   commentStore.fetch(Number(currentRoute.params.id))
-  // commentStore.addComment(res.data.result);
 };
 </script>
 

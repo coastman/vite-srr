@@ -32,10 +32,10 @@
                 <div class="description">{{ item.description }}</div>
               </div>
               <div class="meta">
-                <span><i class="iconfont icon-shijian"></i>5个月前</span>
+                <span><i class="iconfont icon-shijian"></i>{{ timeAgo(item.createdAt) }}</span>
                 <span><i class="iconfont icon-chakan"></i>{{ item.viewCount }}</span>
-                <span><i class="iconfont icon-xiaoxi"></i>4</span>
-                <span><i class="iconfont icon-dianzan"></i>1</span>
+                <span><i class="iconfont icon-xiaoxi"></i>{{ item.commentCount }}</span>
+                <span><i class="iconfont icon-dianzan"></i>{{ item.likeCount }}</span>
                 <span><i class="iconfont icon-yingyongzhongxin"></i>无色庵</span>
               </div>
             </div>
@@ -51,6 +51,7 @@
   import { usePrefetch } from '@/composables/prefeth';
   import { Swiper, SwiperSlide } from 'swiper/vue';
   import { Navigation, Pagination, Autoplay } from 'swiper';
+  import { timeAgo } from '@/helper/time';
 
   const articleStore = useArticleStore();
   usePrefetch(() => articleStore.fetch());

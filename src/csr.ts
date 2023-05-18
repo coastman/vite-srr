@@ -3,15 +3,6 @@ import { createSSRApp } from 'vue';
 import { createVueApp } from './main';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
 
-if (process.env.NODE_ENV === 'development') {
-  const removeCssHotReloaded = () => {
-    const devStyleList = document.querySelectorAll('.vite-dev-ssr');
-    devStyleList.forEach((link) => link.remove());
-  };
-  
-  removeCssHotReloaded();
-}
-
 export interface InitialSSRContext {
   theme: Theme
   store?: any
@@ -51,5 +42,12 @@ router.isReady().then(() => {
   app.mount('#app').$nextTick(() => {
     // @ts-ignore
     window.isHydrate = true;
+    if (process.env.NODE_ENV === 'development') {
+      const removeCssHotReloaded = () => {
+        const devStyleList = document.querySelectorAll('.vite-dev-ssr');
+        devStyleList.forEach((link) => link.remove());
+      };
+      removeCssHotReloaded();
+    }
   });
 })
