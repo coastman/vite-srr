@@ -5,6 +5,15 @@
         <h2>{{ articleStore.detail.title }}</h2>
       </div>
       <div class="content" v-html="markdown.render(articleStore.detail.content || '')"></div>
+      <div class="extra">
+        <client-only>
+          <button class="like-button" @click="handleLike" :disabled="disabled">
+            <i></i>
+            <span>真棒！ </span>
+          </button>
+        </client-only>
+        <div style="width: 100%;">本文于 2023/10/11 发布在主页 | #科学、#前端</div>
+      </div>
     </div>
 
     <div class="comment">
@@ -51,9 +60,9 @@
 
 <script lang="ts" setup>
 import { get, set } from '@/helper/storage';
-import { addComment } from '@/api';
+import { addComment, likeArticle } from '@/api';
 import CommentItem from './components/CommentItem.vue';
-import { ref, reactive, onBeforeMount, type Ref } from 'vue';
+import { ref, reactive, onBeforeMount, type Ref, computed } from 'vue';
 import { useArticleStore } from '@/stores/article';
 import { useCommentStore } from '@/stores/comment';
 import { usePrefetch } from '@/composables/prefeth';
@@ -88,6 +97,11 @@ usePrefetch(
     ])
   }
 );
+
+const disabled = computed(() => {
+  const boolean = likeOptions.value.articleIdList.includes(Number(currentRoute.params.id));
+  return boolean;
+});
 
 const showUserInfo = ref(false);
 
@@ -130,10 +144,16 @@ const user: Ref<IUser> = ref({
   commentatorId: null
 });
 
+const likeOptions = ref({
+  articleIdList: [],
+  commentIdList: []
+});
+
 onBeforeMount(() => { 
   user.value = JSON.parse(get('user') as string) || {};
   commentForm.commentator = user.value.commentator;
   commentForm.commentatorId = user.value.commentatorId;
+  likeOptions.value = JSON.parse(get('like') as string) || {};
 });
 
 const handleConfirm = async (comment?: any, subComment?: any) => {
@@ -154,9 +174,35 @@ const handleConfirm = async (comment?: any, subComment?: any) => {
 
   commentStore.fetch(Number(currentRoute.params.id))
 };
+
+const handleLike = async () => {
+  const res = await likeArticle({
+    refId: Number(currentRoute.params.id),
+    type: 1,
+    status: 1
+  });
+  (likeOptions.value.articleIdList ? likeOptions.value.articleIdList : likeOptions.value.articleIdList = []).push(res?.data?.result?.refId);
+  set('like', JSON.stringify(likeOptions.value))
+};
 </script>
 
 <style lang="less" scoped>
+.extra {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.like-button {
+  color: #ff6838;
+  padding: 6px 8px;
+  border: 1px solid #ff6838;
+  border-radius: 3px;
+  padding-left: 16px;
+  margin-bottom: 16px;
+}
 .children-list {
   .children-item {
     margin-top: 20px;
