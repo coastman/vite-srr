@@ -50,6 +50,7 @@
           :key="item.id"
           :commentItem="item"
           :commentForm="commentForm"
+          :likeOptions="likeOptions"
           @handleReply="handleReply(item)"
           @handleReplyChild="handleReplyChild(item)"
           @handleConfirm="handleConfirm"/>

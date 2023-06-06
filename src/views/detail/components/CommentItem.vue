@@ -9,8 +9,10 @@
       <div class="content">{{ commentItem.content }}</div>
       <div class="meta">
         <span class="mr-12"><i class="iconfont icon-shijian"></i>5个月前</span>
-        <button class="mr-12">赞</button>
-        <button class="mr-12">踩</button>
+        <client-only>
+          <button class="mr-12" @click="handleLike(1)" :disabled="disabled(commentItem)">赞</button>
+          <button class="mr-12" @click="handleDown">踩</button>
+        </client-only>
         <button v-if="!commentItem.relayBoxShow" @click="handleReply">回复</button>
         <button v-else @click="handleCacelReply(commentItem)">取消回复</button>
       </div>
@@ -51,8 +53,10 @@
               <div class="content">{{ subItem.content }}</div>
               <div class="meta">
                 <span class="mr-12"><i class="iconfont icon-shijian"></i>5个月前</span>
-                <button class="mr-12">赞</button>
-                <button class="mr-12">踩</button>
+                <client-only>
+                  <button class="mr-12" @click="handleLike(2, subItem)" :disabled="disabled(subItem)">赞</button>
+                  <button class="mr-12" @click="handleDown">踩</button>
+                </client-only>
                 <button v-if="!(subItem.relayBoxShow && commentItem.replyChild)" @click="handleReplyChild(subItem)">回复</button>
                 <button v-else @click="handleCacelReply(subItem)">取消回复</button>`
               </div>
@@ -90,7 +94,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { likeComment } from '@/api';
+import { set } from '@/helper/storage';
 
 const props = defineProps({
   commentItem: {
@@ -98,6 +104,10 @@ const props = defineProps({
     default: () => {}
   },
   commentForm: {
+    type: Object,
+    default: () => {}
+  },
+  likeOptions: {
     type: Object,
     default: () => {}
   }
@@ -125,6 +135,22 @@ const handleConfirm = (item: any, subItem?: any) => {
     props.commentForm.content = (commentInput.value as any).innerText
   }
   emit('handleConfirm', item, subItem);
+};
+
+const disabled = computed(() => (comment: any) => props.likeOptions.commentIdList.includes(comment.id))
+
+const handleLike = async (type: number, item?: any) => {
+  const res = await likeComment({
+    refId: type === 1 ? props.commentItem.id : item.id,
+    type: 2,
+    status: 1
+  });
+  // eslint-disable-next-line vue/no-mutating-props
+  (props.likeOptions.commentIdList ? props.likeOptions.commentIdList : props.likeOptions.commentIdList = []).push(res?.data?.result?.refId);
+  set('like', JSON.stringify(props.likeOptions))
+};
+const handleDown = () => {
+
 };
 </script>
 

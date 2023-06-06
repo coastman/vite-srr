@@ -7,3 +7,5 @@ export const fetchCommentByArticle = async (id: number) => {
 export const addComment = async (data: any) => {
   return await http.post('/comment', data)
 };
+
+export const likeComment = async (data: any) => await http.post('/comment/like', data);
