@@ -10,6 +10,17 @@
 
 <script setup lang="ts">
 import Layout from '@/components/layout/Index.vue'
+import { useCategoryStore } from './stores/category';
+import { useTagStore } from './stores/tag';
+import { usePrefetch } from '@/composables/prefeth';
+
+const categoryStore = useCategoryStore();
+const tagStore = useTagStore();
+
+usePrefetch(() => Promise.all([
+  categoryStore.fetch(),
+  tagStore.fetch()
+]));
 </script>
 
 <style scoped lang="less">

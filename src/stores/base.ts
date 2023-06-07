@@ -2,9 +2,13 @@ import type { Pinia } from 'pinia'
 import { useArticleStore } from './article'; 
 import { useCounterStore } from './counter';
 import { useCommentStore } from './comment';
+import { useCategoryStore } from './category';
+import { useTagStore } from './tag';
 
 export const useStores = (pinia: Pinia) => ({
   article: useArticleStore(pinia),
   counter: useCounterStore(pinia),
-  comment: useCommentStore(pinia)
+  comment: useCommentStore(pinia),
+  tag: useTagStore(pinia),
+  category: useCategoryStore(pinia)
 });
