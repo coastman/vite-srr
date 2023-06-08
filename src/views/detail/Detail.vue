@@ -12,7 +12,10 @@
             <span>真棒！ </span>
           </button>
         </client-only>
-        <div style="width: 100%;">本文于 2023/10/11 发布在主页 | #科学、#前端</div>
+        <div style="width: 100%;">
+          本文于 {{ new Date(articleStore.detail.createdAt).toLocaleString() }} 
+          发布在 {{ articleStore.detail.categoryList[0].name || '未知' }} | {{ tagStrs }}
+        </div>
       </div>
     </div>
 
@@ -98,6 +101,10 @@ usePrefetch(
     ])
   }
 );
+
+const tagStrs = computed(() => {
+  return articleStore.detail.tagList.map((item: any) => `#${item.name}`).join('、');
+});
 
 const disabled = computed(() => {
   const boolean = likeOptions.value.articleIdList.includes(Number(currentRoute.params.id));

@@ -9,9 +9,7 @@
         <router-view />
       </div>
 
-      <div class="right-box">
-
-      </div>
+      <right-box class="right-box" />
     </main>
 
     <div class="footer">
@@ -21,8 +19,9 @@
 </template>
 
 <script lang="ts" setup>
-  import AppHeader from './Header.vue';
-  import LeftMenu from './LeftMenu.vue';
+import AppHeader from './Header.vue';
+import LeftMenu from './LeftMenu.vue';
+import RightBox from './RightBox.vue';
 
 </script>
 

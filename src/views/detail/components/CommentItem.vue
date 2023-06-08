@@ -8,10 +8,10 @@
       <div class="commentator">{{ commentItem.commentator }}</div>
       <div class="content">{{ commentItem.content }}</div>
       <div class="meta">
-        <span class="mr-12"><i class="iconfont icon-shijian"></i>5个月前</span>
+        <span class="mr-12"><i class="iconfont icon-shijian"></i>{{ timeAgo(commentItem.createdAt) }}</span>
         <client-only>
           <button class="mr-12" @click="handleLike(1)" :disabled="disabled(commentItem)">赞</button>
-          <button class="mr-12" @click="handleDown">踩</button>
+          <!-- <button class="mr-12" @click="handleDown">踩</button> -->
         </client-only>
         <button v-if="!commentItem.relayBoxShow" @click="handleReply">回复</button>
         <button v-else @click="handleCacelReply(commentItem)">取消回复</button>
@@ -52,10 +52,10 @@
               <div class="commentator">{{ subItem.commentator }}</div>
               <div class="content">{{ subItem.content }}</div>
               <div class="meta">
-                <span class="mr-12"><i class="iconfont icon-shijian"></i>5个月前</span>
+                <span class="mr-12"><i class="iconfont icon-shijian"></i>{{ timeAgo(subItem.createdAt) }}</span>
                 <client-only>
                   <button class="mr-12" @click="handleLike(2, subItem)" :disabled="disabled(subItem)">赞</button>
-                  <button class="mr-12" @click="handleDown">踩</button>
+                  <!-- <button class="mr-12" @click="handleDown">踩</button> -->
                 </client-only>
                 <button v-if="!(subItem.relayBoxShow && commentItem.replyChild)" @click="handleReplyChild(subItem)">回复</button>
                 <button v-else @click="handleCacelReply(subItem)">取消回复</button>`
@@ -97,6 +97,7 @@
 import { ref, computed } from 'vue';
 import { likeComment } from '@/api';
 import { set } from '@/helper/storage';
+import { timeAgo } from '@/helper/time';
 
 const props = defineProps({
   commentItem: {

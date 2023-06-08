@@ -36,7 +36,7 @@
                 <span><i class="iconfont icon-chakan"></i>{{ item.viewCount }}</span>
                 <span><i class="iconfont icon-xiaoxi"></i>{{ item.commentCount }}</span>
                 <span><i class="iconfont icon-dianzan"></i>{{ item.likeCount }}</span>
-                <span><i class="iconfont icon-yingyongzhongxin"></i>无色庵</span>
+                <span><i class="iconfont icon-yingyongzhongxin"></i>{{ item.categoryList[0]?.name || '' }}</span>
               </div>
             </div>
           </div>
