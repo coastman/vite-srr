@@ -31,6 +31,7 @@ export const createVueApp = (context: ICreatorContext) => {
 
   const head = createHead();
   app.use(head);
+
   useHead({
     htmlAttrs: {
       'class': theme.theme
