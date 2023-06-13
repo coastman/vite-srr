@@ -30,12 +30,12 @@ app.use(VueProgressBar, {
 });
 
 router.beforeEach((_, __, next) => {
-  app.config.globalProperties.$Progress.start()
-  next()
+  app.config.globalProperties.$Progress.start();
+  next();
 });
 
 router.afterEach((_, __, failure) => {
-  failure ? app.config.globalProperties.$Progress.fail(failure) : app.config.globalProperties.$Progress.finish()
+  failure ? app.config.globalProperties.$Progress.fail(failure) : app.config.globalProperties.$Progress.finish();
 })
 
 router.isReady().then(() => {
@@ -50,4 +50,4 @@ router.isReady().then(() => {
       removeCssHotReloaded();
     }
   });
-})
+});

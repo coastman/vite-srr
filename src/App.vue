@@ -1,5 +1,5 @@
 <template>
-  <div class="root">
+  <div>
     <client-only>
       <vue-progress-bar />
     </client-only>
@@ -25,9 +25,3 @@ usePrefetch(() => Promise.all([
   statisticStore.fetch()
 ]));
 </script>
-
-<style scoped lang="less">
-.root {
-
-}
-</style>

@@ -14,7 +14,7 @@
         </client-only>
         <div style="width: 100%;">
           本文于 {{ new Date(articleStore.detail.createdAt).toLocaleString() }} 
-          发布在 {{ articleStore.detail.categoryList[0].name || '未知' }} | {{ tagStrs }}
+          发布在 {{ (articleStore.detail.categoryList || [])[0]?.name || '未知' }} | {{ tagStrs }}
         </div>
       </div>
     </div>
@@ -103,7 +103,7 @@ usePrefetch(
 );
 
 const tagStrs = computed(() => {
-  return articleStore.detail.tagList.map((item: any) => `#${item.name}`).join('、');
+  return (articleStore.detail.tagList || []).map((item: any) => `#${item.name}`).join('、');
 });
 
 const disabled = computed(() => {

@@ -18,12 +18,12 @@ export interface ICreatorContext {
 }
 
 export const createVueApp = (context: ICreatorContext) => {
-  const app = context.appCreator(App)
+  const app = context.appCreator(App);
 
-  const pinia = createStore()
+  const pinia = createStore();
   app.use(pinia);
 
-  const router = createRouter()
+  const router = createRouter();
   app.use(router);
 
   const theme = createTheme(context.theme);
@@ -36,7 +36,7 @@ export const createVueApp = (context: ICreatorContext) => {
     htmlAttrs: {
       'class': theme.theme
     }
-  })
+  });
 
   app.component(ClientOnly.name, ClientOnly);
 
@@ -46,5 +46,5 @@ export const createVueApp = (context: ICreatorContext) => {
     pinia,
     head,
     theme
-  }
+  };
 };

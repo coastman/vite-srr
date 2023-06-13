@@ -5,7 +5,10 @@
       v-for="(item, index) in list"
       :key="index"
       :to="item.link"
-    >{{ item.text }}</router-link>
+    >
+      <i :class="['iconfont', item.iconfont]" />
+      <span>{{ item.text }}</span>
+    </router-link>
   </div>
 </template>
 
@@ -37,23 +40,7 @@ const list = ref([
     text: '狂浪生',
     link: '/me',
     iconfont: 'icon-wo2'
-  },
-  // {
-  //   text: '丹青阁',
-  //   link: '/list'
-  // },
-  // {
-  //   text: '客户端',
-  //   link: '/list'
-  // },
-  // {
-  //   text: '广而告之',
-  //   link: '/list'
-  // },
-  // {
-  //   text: 'hello world',
-  //   link: '/list'
-  // },
+  }
 ]);
 </script>
 
@@ -68,7 +55,6 @@ const list = ref([
       color: @text-color;
       display: flex;
       align-items: center;
-      // justify-content: center;
       padding-left: 14px;
       opacity: .5;
       margin-bottom: 10px;
