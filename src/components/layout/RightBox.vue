@@ -2,14 +2,14 @@
   <section>
     <div class="module">
       <div class="item">
-        <div class="count">{{ statisticStore.statistic.hotStatistic.count }}</div>
+        <div class="count">{{ statisticStore.statistic?.hotStatistic?.count }}</div>
         <span class="description">全站文章</span>
       </div>
 
       <div class="separator" />
 
       <div class="item">
-        <div class="count">{{ statisticStore.statistic.commentStatistic.count }}</div>
+        <div class="count">{{ statisticStore.statistic?.commentStatistic?.count }}</div>
         <span class="description">全站评论</span>
       </div>
 
@@ -24,10 +24,15 @@
     <div class="hot-list">
       <div class="header">热度文章</div>
       <ul class="article-list">
-        <li class="item" v-for="(item, index) in statisticStore.statistic.hotStatistic.list" :key="index">
-          <span class="index">{{  index + 1 }}</span>
+        <li class="item" v-for="(item, index) in statisticStore.statistic?.hotStatistic?.list" :key="index">
+          <span :class="{
+            'index': true,
+            'first': index === 0,
+            'second': index === 1,
+            'third': index === 2
+          }">{{ index + 1 }}</span>
           <div class="content">
-            <span>123333</span>
+            <span>{{ item.title }}</span>
             <div class="meta">
               <span><i class="iconfont icon-shijian"></i>{{ timeAgo(item.createdAt) }}</span>
               <span><i class="iconfont icon-chakan"></i>{{ item.viewCount }}</span>
@@ -43,7 +48,11 @@
     </client-only>
 
     <div class="tag">
-      <span v-for="(item) in statisticStore.statistic.tagStatistic.list" :key="item.id" class="tag-item">
+      <span
+        v-for="(item) in statisticStore.statistic?.tagStatistic?.list"
+        :key="item.id"
+        class="tag-item"
+      >
         {{ item.name }}
       </span>
     </div>
@@ -70,7 +79,6 @@ const attributes = ref<any[]>([
   }
 ]);
 </script>
-
 
 <style lang="less" scoped>
 .calendar {
@@ -104,7 +112,6 @@ const attributes = ref<any[]>([
 
     span {
       font-size: 12px;
-      // color: rgba(0, 0, 0, .5);
       text-transform: uppercase;
     }
   }
@@ -138,13 +145,36 @@ const attributes = ref<any[]>([
       margin-top: 8px;
       display: flex;
       color: @text-color-1;
+      font-size: 14px;
 
       .index {
         margin-right: 8px;
+        width: 16px;
+        height: 16px;
+        margin-top: 2px;
+        line-height: 16px;
+        text-align: center;
+      }
+
+      .first, .second, .third {
+        color: #fff;
+        font-size: 12px;
+      }
+
+      .first {
+        background-color: #0088f5;
+      }
+  
+      .second {
+        background-color: #4caf50b3;
+      }
+
+      .third {
+        background-color: #ff572299;
       }
 
       .meta {
-        margin-top: 4px;
+        margin-top: 8px;
         font-size: 12px;
         color: @text-color-2;
 
