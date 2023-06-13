@@ -3,21 +3,21 @@
     <div class="module">
       <div class="item">
         <div class="count">{{ statisticStore.statistic.hotStatistic.count }}</div>
-        <span>全站文章</span>
+        <span class="description">全站文章</span>
       </div>
 
       <div class="separator" />
 
       <div class="item">
         <div class="count">{{ statisticStore.statistic.commentStatistic.count }}</div>
-        <span>全站评论</span>
+        <span class="description">全站评论</span>
       </div>
 
       <div class="separator" />
 
       <div class="item">
         <div class="count">13</div>
-        <span>今日阅读</span>
+        <span class="description">今日阅读</span>
       </div>
     </div>
   
@@ -88,15 +88,18 @@ const attributes = ref<any[]>([
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: @text-color;
 
     .count {
       padding: 8px;
       font-size: 24px;
       font-weight: 700;
-      color: @text-color;
+      color: @text-color-1;
       font-family: SpecialSymbol;
       margin-bottom: 4px;
+    }
+
+    .description {
+      color: @text-color-2;
     }
 
     span {
@@ -108,7 +111,7 @@ const attributes = ref<any[]>([
 
   .separator {
     width: 1px;
-    background-color: rgba(0, 0, 0, .26);
+    background-color: @text-color-2;
     height: 18px;
   }
 }  
@@ -119,7 +122,7 @@ const attributes = ref<any[]>([
   padding: 12px;
 
   .header {
-    color: @text-color;
+    color: @text-color-1;
     font-size: 14px;
     font-weight: 700;
     padding-left: 8px;
@@ -134,7 +137,7 @@ const attributes = ref<any[]>([
       padding: 8px;
       margin-top: 8px;
       display: flex;
-      color: @text-color;
+      color: @text-color-1;
 
       .index {
         margin-right: 8px;
@@ -143,7 +146,7 @@ const attributes = ref<any[]>([
       .meta {
         margin-top: 4px;
         font-size: 12px;
-        // color: rgba(0, 0, 0, .7);
+        color: @text-color-2;
 
         span + span {
           margin-left: 16px;

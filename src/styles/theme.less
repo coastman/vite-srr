@@ -4,26 +4,28 @@
     @header-border,
     @primary-color,
     @theme-logo-rotate,
-    @text-color,
+    @text-color-1,
     @module-bg-2,
     @article-text-color,
     @comment-dark-1,
     @comment-dark-2,
     @comment-dark-3,
-    @comment-placeholder-color
+    @comment-placeholder-color,
+    @text-color-2
   ) {
   --body-bg: @body-bg;
   --module-bg-1: @module-bg-1;
   --header-border: @header-border;
   --primary-color: @primary-color;
   --theme-logo-rotate: @theme-logo-rotate;
-  --text-color: @text-color;
+  --text-color-1: @text-color-1;
   --module-bg-2: @module-bg-2;
   --article-text-color: @article-text-color;
   --comment-dark-1:  @comment-dark-1;
   --comment-dark-2:  @comment-dark-2;
   --comment-dark-3:  @comment-dark-3;
   --comment-placeholder-color:  @comment-placeholder-color;
+  --text-color-2: @text-color-2;
 }
 
 :root {
@@ -40,7 +42,8 @@
       #f2f3f5,
       #dedede,
       #cfcfcf,
-      rgba(0, 0, 0, .38)
+      rgba(0, 0, 0, .38),
+      rgba(0, 0, 0, .5)
     );
   }
 
@@ -57,18 +60,19 @@
       #2d2d2d,
       #232323,
       #141414,
-      rgba(240, 240, 240, .38)
+      rgba(240, 240, 240, .38),
+      rgba(240, 240, 240, .5)
     );
   }
 }
 
 body {
   background: @body-bg;
-  color: @text-color;
+  color: @text-color-1;
 }
 
 a {
-  color: @text-color;
+  color: @text-color-1;
   opacity: .6;
   font-size: 14px;
 

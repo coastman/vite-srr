@@ -105,7 +105,7 @@
         width: 100%;
         height: 140px;
         margin-bottom: 20px;
-        color: @text-color;
+        color: @text-color-1;
         background-color: @module-bg-2;
         cursor: pointer;
 

@@ -45,36 +45,36 @@ const list = ref([
 </script>
 
 <style lang="less" scoped>
-  .left-menu {
-    width: 180px;
-    margin-right: 20px;
+.left-menu {
+  width: 180px;
+  margin-right: 20px;
 
-    .menu-item {
-      height: 46px;
-      line-height: 46px;
-      color: @text-color;
-      display: flex;
-      align-items: center;
-      padding-left: 14px;
-      opacity: .5;
-      margin-bottom: 10px;
+  .menu-item {
+    height: 46px;
+    line-height: 46px;
+    color: @text-color-1;
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+    opacity: .5;
+    margin-bottom: 10px;
 
-      &:hover {
-        opacity: 1;
-        background-color: @module-bg-1;
-        cursor: pointer;
-        color: @primary-color;
-      }
+    &:hover {
+      opacity: 1;
+      background-color: @module-bg-1;
+      cursor: pointer;
+      color: @primary-color;
+    }
 
-      &.router-link-active {
-        opacity: 1;
-        background-color: @module-bg-1;
-        color: @primary-color;
-      }
+    &.router-link-active {
+      opacity: 1;
+      background-color: @module-bg-1;
+      color: @primary-color;
+    }
 
-      .iconfont {
-        margin-right: 16px;
-      }
+    .iconfont {
+      margin-right: 16px;
     }
   }
+}
 </style>
