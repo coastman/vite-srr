@@ -30,7 +30,7 @@
 <style lang="less" scoped>
   .header {
     height: 60px;
-    background: @header-bg;
+    background: @module-bg-1;
     border-bottom: 1px solid @header-border;
 
     .container {

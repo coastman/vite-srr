@@ -39,7 +39,7 @@
     </div>
 
     <client-only>
-      <Calendar :attributes="attributes" expanded borderless />
+      <Calendar :attributes="attributes" :is-dark="isDark" expanded borderless />
     </client-only>
 
     <div class="tag">
@@ -51,13 +51,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useStatisticStore } from '@/stores/statistic';
 import { timeAgo } from '@/helper/time';
 import { Calendar } from 'v-calendar';
 import 'v-calendar/style.css';
+import { useTheme, Theme } from '@/composables/theme';
+
+const theme = useTheme();
 const statisticStore = useStatisticStore();
 
+const isDark = computed(() => theme.theme.value === Theme.Dark);
 const attributes = ref<any[]>([
   {
     key: 'today',
@@ -73,7 +77,7 @@ const attributes = ref<any[]>([
   width: 100%;
 }
 .module {
-  background-color: @header-bg;
+  background-color: @module-bg-1;
   margin-bottom: 20px;
   display: flex;
   justify-content: space-around;
@@ -84,6 +88,7 @@ const attributes = ref<any[]>([
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: @text-color;
 
     .count {
       padding: 8px;
@@ -96,7 +101,7 @@ const attributes = ref<any[]>([
 
     span {
       font-size: 12px;
-      color: rgba(0, 0, 0, .5);
+      // color: rgba(0, 0, 0, .5);
       text-transform: uppercase;
     }
   }
@@ -109,7 +114,7 @@ const attributes = ref<any[]>([
 }  
 
 .hot-list {
-  background-color: @header-bg;
+  background-color: @module-bg-1;
   margin-bottom: 20px;
   padding: 12px;
 
@@ -138,7 +143,7 @@ const attributes = ref<any[]>([
       .meta {
         margin-top: 4px;
         font-size: 12px;
-        color: rgba(0, 0, 0, .7);
+        // color: rgba(0, 0, 0, .7);
 
         span + span {
           margin-left: 16px;
@@ -160,7 +165,7 @@ const attributes = ref<any[]>([
   max-height: 400px;
   overflow-y: auto;
   padding: 12px;
-  background-color: @header-bg;
+  background-color: @module-bg-1;
   box-sizing: border-box;
   padding-top: 4px;
 
@@ -174,5 +179,19 @@ const attributes = ref<any[]>([
     margin-right: 8px;
     display: inline-flex;
   }
+}
+</style>
+
+<style lang="less">
+.vc-blue {
+  --vc-accent-600: @primary-color;
+}
+
+.vc-focus:focus-within {
+  box-shadow: none !important;
+}
+
+.vc-dark {
+  --vc-bg: @module-bg-1 !important;
 }
 </style>

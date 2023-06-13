@@ -46,7 +46,7 @@ import RightBox from './RightBox.vue';
 
   .footer {
     margin-top: 20px;
-    background-color: @header-bg;
+    background-color: @module-bg-1;
     height: 70px;
     display: flex;
     justify-content: center;

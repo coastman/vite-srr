@@ -222,7 +222,7 @@ const handleLike = async () => {
 
 .article-detail {
   padding: 10px 20px;
-  background-color: @header-bg;
+  background-color: @module-bg-1;
   margin-bottom: 20px;
 
   .title {
@@ -251,7 +251,7 @@ const handleLike = async () => {
 
 .comment {
   padding: 10px 20px;
-  background-color: @header-bg;
+  background-color: @module-bg-1;
 
   .user-info {
     margin-bottom: 12px;

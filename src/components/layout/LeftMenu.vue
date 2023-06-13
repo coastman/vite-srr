@@ -61,14 +61,14 @@ const list = ref([
 
       &:hover {
         opacity: 1;
-        background-color: @header-bg;
+        background-color: @module-bg-1;
         cursor: pointer;
         color: @primary-color;
       }
 
       &.router-link-active {
         opacity: 1;
-        background-color: @header-bg;
+        background-color: @module-bg-1;
         color: @primary-color;
       }
 

@@ -68,7 +68,7 @@
   .home {
     .carousel {
       padding: 10px;
-      background-color: @header-bg;
+      background-color: @module-bg-1;
     }
   
     .swiper {
@@ -106,11 +106,11 @@
         height: 140px;
         margin-bottom: 20px;
         color: @text-color;
-        background-color: @module-bg;
+        background-color: @module-bg-2;
         cursor: pointer;
 
         &:hover {
-          background-color: @header-bg;
+          background-color: @module-bg-1;
         }
 
         .item {
