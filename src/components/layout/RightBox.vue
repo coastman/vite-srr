@@ -151,7 +151,6 @@ const attributes = ref<any[]>([
         margin-right: 8px;
         width: 16px;
         height: 16px;
-        margin-top: 2px;
         line-height: 16px;
         text-align: center;
       }
@@ -159,6 +158,7 @@ const attributes = ref<any[]>([
       .first, .second, .third {
         color: #fff;
         font-size: 12px;
+        margin-top: 1px;
       }
 
       .first {

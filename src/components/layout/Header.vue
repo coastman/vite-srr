@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="header-main container">
-      <div class="logo">
+      <div class="logo" @click="handleToHome">
         <img src="@/assets/logo.svg">
         <span>向死而生</span>
       </div>
@@ -17,12 +17,15 @@
 
 <script lang="ts" setup>
 import { useTheme } from '@/composables/theme';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const theme = useTheme();
 
 const reactiveTheme = theme.theme;
 
 const handleToggleTheme = () => theme.toogleTheme();
+
+const handleToHome = () => router.push({ path: '/' });
 </script>
 
 <style lang="less" scoped>
@@ -44,6 +47,7 @@ const handleToggleTheme = () => theme.toogleTheme();
 
     .logo {
       height: 24px;
+      cursor: pointer;
 
       img {
         width: 180px;
