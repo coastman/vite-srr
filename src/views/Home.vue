@@ -14,7 +14,9 @@
         }"
       >
         <swiper-slide v-for="(item, index) in articleStore.list" :key="index">
-          <img :src="item.thumbnailUrl" alt="" />
+          <router-link :to="`/detail/${item.id}`" class="swiper-link">
+            <img :src="item.thumbnailUrl" alt="" />
+          </router-link>
         </swiper-slide>
       </swiper>
     </div>
@@ -88,6 +90,10 @@
         background-color: #FFF;
         opacity: 1;
         border-radius: 2px;
+      }
+
+      .swiper-link {
+        opacity: 1;
       }
 
       img {

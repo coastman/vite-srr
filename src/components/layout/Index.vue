@@ -6,7 +6,7 @@
       <left-menu />
 
       <div class="main-content">
-        <router-view />
+        <router-view :key="$route.fullPath"/>
       </div>
 
       <right-box class="right-box" />

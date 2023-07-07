@@ -25,11 +25,11 @@ export const useArticleStore = defineStore('article', () => {
   };
 
   const fetchDetail = async (id: number) => {
-    detail.value = (await getArticleDetail(id)).data.result;
+    detail.value = (await getArticleDetail(id)).data;
     const categoryList = categoryStore.list;
     const tagList = tagStore.list;
-    detail.value.categoryList = detail.value.categoryIdList.map((id: any) => categoryList.find(subItem => subItem.id === id)) || [];
-    detail.value.tagList = detail.value.tagIdList.map((id: any) => tagList.find(item => item.id === id)) || [];
+    detail.value.result.categoryList = detail.value.result.categoryIdList.map((id: any) => categoryList.find(subItem => subItem.id === id)) || [];
+    detail.value.result.tagList = detail.value.result.tagIdList.map((id: any) => tagList.find(item => item.id === id)) || [];
   };
 
   return { list, fetch, fetchDetail, detail }

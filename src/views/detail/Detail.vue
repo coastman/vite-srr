@@ -2,9 +2,9 @@
   <div class="detail">
     <div class="article-detail">
       <div class="title">
-        <h2>{{ articleStore.detail.title }}</h2>
+        <h2>{{ articleStore.detail.result.title }}</h2>
       </div>
-      <div class="content" v-html="markdown.render(articleStore.detail.content || '')"></div>
+      <div class="content" v-html="markdown.render(articleStore.detail.result.content || '')"></div>
       <div class="extra">
         <client-only>
           <button class="like-button" @click="handleLike" :disabled="disabled">
@@ -13,10 +13,42 @@
           </button>
         </client-only>
         <div style="width: 100%;">
-          本文于 {{ new Date(articleStore.detail.createdAt).toLocaleString() }} 
-          发布在 {{ (articleStore.detail.categoryList || [])[0]?.name || '未知' }} | {{ tagStrs }}
+          本文于 {{ new Date(articleStore.detail.result.createdAt).toLocaleString() }} 
+          发布在 {{ (articleStore.detail.result.categoryList || [])[0]?.name || '未知' }} | {{ tagStrs }}
         </div>
       </div>
+    </div>
+
+    <div class="prev-next">
+      <div class="prev">
+        <div class="content">
+          <template v-if="articleStore.detail.prevArticle">   
+            <router-link :to="`/detail/${articleStore.detail.prevArticle.id}`">
+              <p class="title">{{ articleStore.detail.prevArticle.title }}</p>
+              <p class="description">{{ articleStore.detail.prevArticle.description }}</p>
+            </router-link>
+          </template>
+          <template v-else>
+            <p class="empty">已是最新</p>
+          </template>
+        </div>
+      </div>
+      <div class="next">
+        <div class="content">
+          <template v-if="articleStore.detail.nextArticle">
+            <router-link :to="`/detail/${articleStore.detail.nextArticle.id}`">
+              <p class="title">{{ articleStore.detail.nextArticle.title }}</p>
+              <p class="description">{{ articleStore.detail.nextArticle.description }}</p>
+            </router-link>
+          </template>
+          <template v-else>
+            <p class="empty">已是最后</p>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="related-list">
     </div>
 
     <div class="comment">
@@ -103,7 +135,7 @@ usePrefetch(
 );
 
 const tagStrs = computed(() => {
-  return (articleStore.detail.tagList || []).map((item: any) => `#${item.name}`).join('、');
+  return (articleStore.detail.result.tagList || []).map((item: any) => `#${item.name}`).join('、');
 });
 
 const disabled = computed(() => {
@@ -246,6 +278,49 @@ const handleLike = async () => {
         display: block;
       }
     }
+  }
+}
+
+.prev-next {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  p {
+    margin: 0px;
+  }
+
+  .description {
+    font-size: 12px;
+    color: @text-color-2;
+  }
+
+  .title {
+    margin-bottom: 10px;
+    color: @text-color-1;
+  }
+
+  .empty {
+    font-size: 14px;
+    text-align: center;
+    color: @text-color-2;
+    width: 100%;
+  }
+  .content {
+    width: 100%;
+    a {
+      opacity: 1;
+    }
+  }
+
+  .prev, .next {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    width: 49%;
+    background-color: @module-bg-1;
+    box-sizing: border-box;
+    cursor: pointer;
   }
 }
 

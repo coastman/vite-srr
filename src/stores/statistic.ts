@@ -9,7 +9,8 @@ export interface IStatisticItem {
 export interface IStatistic {
   hotStatistic?: IStatisticItem
   tagStatistic?: IStatisticItem
-  commentStatistic?: IStatisticItem 
+  commentStatistic?: IStatisticItem
+  todayViewCount?: number
 }
 
 export const useStatisticStore = defineStore('statistic', () => {

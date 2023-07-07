@@ -16,7 +16,7 @@
       <div class="separator" />
 
       <div class="item">
-        <div class="count">13</div>
+        <div class="count">{{ statisticStore.statistic?.todayViewCount || 0 }}</div>
         <span class="description">今日阅读</span>
       </div>
     </div>
@@ -32,7 +32,7 @@
             'third': index === 2
           }">{{ index + 1 }}</span>
           <div class="content">
-            <span>{{ item.title }}</span>
+            <router-link :to="`/detail/${item.id}`"><span>{{ item.title }}</span></router-link>
             <div class="meta">
               <span><i class="iconfont icon-shijian"></i>{{ timeAgo(item.createdAt) }}</span>
               <span><i class="iconfont icon-chakan"></i>{{ item.viewCount }}</span>
