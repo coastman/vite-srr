@@ -2,9 +2,9 @@
   <div class="detail">
     <div class="article-detail">
       <div class="title">
-        <h2>{{ articleStore.detail.result.title }}</h2>
+        <h2>{{ articleStore.detail.result?.title }}</h2>
       </div>
-      <div class="content" v-html="markdown.render(articleStore.detail.result.content || '')"></div>
+      <div class="content" v-html="markdown.render(articleStore.detail.result?.content || '')"></div>
       <div class="extra">
         <client-only>
           <button class="like-button" @click="handleLike" :disabled="disabled">
@@ -13,8 +13,8 @@
           </button>
         </client-only>
         <div style="width: 100%;">
-          本文于 {{ new Date(articleStore.detail.result.createdAt).toLocaleString() }} 
-          发布在 {{ (articleStore.detail.result.categoryList || [])[0]?.name || '未知' }} | {{ tagStrs }}
+          本文于 {{ new Date(articleStore.detail.result?.createdAt).toLocaleString() }} 
+          发布在 {{ (articleStore.detail.result?.categoryList || [])[0]?.name || '未知' }} | {{ tagStrs }}
         </div>
       </div>
     </div>
@@ -49,6 +49,32 @@
     </div>
 
     <div class="related-list">
+      <div class="row" v-if="relatedListOne.length">
+        <div class="content" v-for="item in relatedListOne" :key="item.id">
+          <router-link :to="`/detail/${item.id}`">
+            <div class="image-box">
+              <img :src="item.thumbnailUrl" alt="" srcset="">
+            </div>
+            <div class="extra-content">
+              <p class="title">{{ item.title }}</p>
+              <p class="description">{{ item.description }}</p>
+            </div>
+          </router-link>
+        </div>
+      </div>
+      <div class="row" v-if="relatedListTwo.length">
+        <div class="content" v-for="item in relatedListTwo" :key="item.id">
+          <router-link :to="`/detail/${item.id}`">
+            <div class="image-box">
+              <img :src="item.thumbnailUrl" alt="" srcset="">
+            </div>
+            <div class="extra-content">
+              <p class="title">{{ item.title }}</p>
+              <p class="description">{{ item.description }}</p>
+            </div>
+          </router-link>
+        </div>
+      </div>
     </div>
 
     <div class="comment">
@@ -135,13 +161,16 @@ usePrefetch(
 );
 
 const tagStrs = computed(() => {
-  return (articleStore.detail.result.tagList || []).map((item: any) => `#${item.name}`).join('、');
+  return (articleStore.detail.result?.tagList || []).map((item: any) => `#${item.name}`).join('、');
 });
 
 const disabled = computed(() => {
   const boolean = likeOptions.value.articleIdList.includes(Number(currentRoute.params.id));
   return boolean;
 });
+
+const relatedListOne = computed(() => articleStore.detail?.relatedList.slice(0, 3));
+const relatedListTwo = computed(() => articleStore.detail?.relatedList.slice(3, 6));
 
 const showUserInfo = ref(false);
 
@@ -317,10 +346,49 @@ const handleLike = async () => {
     padding: 12px;
     display: flex;
     align-items: center;
-    width: 49%;
+    width: 50%;
     background-color: @module-bg-1;
     box-sizing: border-box;
     cursor: pointer;
+  }
+  .prev + .next {
+    margin-left: 20px;
+  }
+}
+
+.related-list {
+  .row {
+    display: flex;
+    .content {
+      width: 33.33%;
+      background-color: @module-bg-1;
+      .image-box {
+        img {
+          width: 100%;
+          height: 86px;
+          object-fit: cover;
+        }
+      }
+      p {
+        margin: 0px;
+      }
+      .description {
+        font-size: 12px;
+        padding: 8px;
+        color: @text-color-2;
+        padding-top: 0px;
+      }
+
+      .title {
+        padding: 8px;
+        font-size: 14px;
+        color: @text-color-1;
+      }
+    }
+    .content + .content {
+      margin-left: 12px;
+    }
+    margin-bottom: 20px;
   }
 }
 
