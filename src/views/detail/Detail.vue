@@ -169,8 +169,8 @@ const disabled = computed(() => {
   return boolean;
 });
 
-const relatedListOne = computed(() => articleStore.detail?.relatedList.slice(0, 3));
-const relatedListTwo = computed(() => articleStore.detail?.relatedList.slice(3, 6));
+const relatedListOne = computed(() => articleStore.detail?.relatedList?.slice(0, 3));
+const relatedListTwo = computed(() => articleStore.detail?.relatedList?.slice(3, 6));
 
 const showUserInfo = ref(false);
 
