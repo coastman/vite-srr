@@ -5,6 +5,7 @@ import App from './App.vue'
 import { createTheme, Theme } from './composables/theme';
 import { createRouter } from '@/router';
 import ClientOnly from './components/ClientOnly';
+import VueProgressBar from '@aacassandra/vue3-progressbar';
 
 import '@/styles/app.less';
 import 'swiper/css';
@@ -39,6 +40,12 @@ export const createVueApp = (context: ICreatorContext) => {
   });
 
   app.component(ClientOnly.name, ClientOnly);
+
+  app.use(VueProgressBar, {
+    color: '#0088f5',
+    failedColor: '#ff5722',
+    autoFinish: true
+  });
 
   return {
     app,

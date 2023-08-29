@@ -211,6 +211,8 @@ const attributes = ref<any[]>([
     margin-top: 8px;
     margin-right: 8px;
     display: inline-flex;
+    padding: 6px 8px;
+    cursor: pointer;
   }
 }
 </style>
