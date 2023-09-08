@@ -49,7 +49,7 @@
     </div>
 
     <div class="related-list">
-      <div class="row" v-if="relatedListOne.length">
+      <div class="row" v-if="(relatedListOne || []).length">
         <div class="content" v-for="item in relatedListOne" :key="item.id">
           <router-link :to="`/detail/${item.id}`">
             <div class="image-box">

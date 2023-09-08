@@ -201,6 +201,8 @@ const attributes = ref<any[]>([
   background-color: @module-bg-1;
   box-sizing: border-box;
   padding-top: 4px;
+  height: 280px;
+  overflow-y: scroll;
 
   .tag-item {
     height: 24px;
