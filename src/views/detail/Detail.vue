@@ -62,7 +62,7 @@
           </router-link>
         </div>
       </div>
-      <div class="row" v-if="relatedListTwo.length">
+      <div class="row" v-if="relatedListTwo?.length">
         <div class="content" v-for="item in relatedListTwo" :key="item.id">
           <router-link :to="`/detail/${item.id}`">
             <div class="image-box">

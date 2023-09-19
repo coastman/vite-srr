@@ -45,6 +45,17 @@
         </router-link>
       </div>
     </div>
+
+    <button class="load-more" :disabled="articleStore.list.length === articleStore.total" @click="handleLoad">
+      <div class="background">
+        <span class="left"></span>
+        <span class="right"></span>
+      </div>
+      <div class="content">
+        <span class="left">{{ articleStore.list.length }} / {{  articleStore.total }}</span>
+        <span class="right">加载更多</span>
+      </div>
+    </button>
   </main>
 </template>
 
@@ -63,6 +74,10 @@
 
   const onSlideChange = () => {
     console.log('slide change');
+  };
+
+  const handleLoad = () => {
+    articleStore.loadMore();
   };
 </script>
 
@@ -163,6 +178,57 @@
             // justify-content: space-between;
           }
         }
+      }
+    }
+  }
+
+  .load-more {
+    width: 100%;
+    height: 48px;
+    position: relative;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      overflow: hidden;
+
+      .left {
+        background: @module-bg-1;
+        transform: skew(-20deg);
+        flex: 1;
+        margin-left: -16px;
+        margin-right: 16px;
+      }
+      .right {
+        width: 200px;
+        margin-right: -16px;
+        background: @module-bg-1;
+        transform: skew(-20deg);
+      }
+    }
+
+    .content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: @text-color-1;
+      opacity: .6;
+
+      .left {
+        margin-left: 16px;
+      }
+      .right {
+        margin-right: 16px;
       }
     }
   }
