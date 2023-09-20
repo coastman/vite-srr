@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { tagList } from '@/api';
 
 export const useTagStore = defineStore('tag', () => {
-  const list = ref([]);
+  const list: Ref<any[]> = ref([]);
 
   const fetch = async () => {
     const res = await tagList({

@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { categoryList } from '@/api';
 
 export const useCategoryStore = defineStore('category', () => {
-  const list = ref([]);
+  const list: Ref<any[]> =  ref([]);
 
   const fetch = async () => {
     const res = await categoryList();
