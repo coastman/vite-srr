@@ -5,6 +5,8 @@ const Code = () => import('../views/Code.vue');
 const Mind = () => import('../views/Mind.vue');
 const Comments = () => import('../views/Comments.vue');
 const Me = () => import('../views/Me.vue');
+const Date = () => import('../views/Date.vue');
+const Tag = () => import('../views/Tag.vue');
 
 export const createRouter = () => {
   return _createRouter({
@@ -39,6 +41,16 @@ export const createRouter = () => {
         path: '/me',
         name: 'me',
         component: Me
+      },
+      {
+        path: '/date/:date',
+        name: 'date',
+        component: Date
+      },
+      {
+        path: '/tag/:id',
+        name: 'tag',
+        component: Tag
       }
     ]
   });

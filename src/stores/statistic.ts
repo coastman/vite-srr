@@ -10,6 +10,7 @@ export interface IStatistic {
   hotStatistic?: IStatisticItem
   tagStatistic?: IStatisticItem
   commentStatistic?: IStatisticItem
+  dateList?: any
   todayViewCount?: number
 }
 

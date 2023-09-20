@@ -44,7 +44,13 @@
     </div>
 
     <client-only>
-      <Calendar :attributes="attributes" :is-dark="isDark" expanded borderless />
+      <Calendar
+        :attributes="attributes"
+        :is-dark="isDark"
+        expanded
+        borderless
+        @dayclick="handleDayCilck"
+      />
     </client-only>
 
     <div class="tag">
@@ -52,6 +58,7 @@
         v-for="(item) in statisticStore.statistic?.tagStatistic?.list"
         :key="item.id"
         class="tag-item"
+        @click="handleTagClick(item)"
       >
         {{ item.name }}
       </span>
@@ -60,24 +67,49 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { computed, type Ref } from 'vue';
 import { useStatisticStore } from '@/stores/statistic';
-import { timeAgo } from '@/helper/time';
+import { timeAgo, formatDate } from '@/helper/time';
 import { Calendar } from 'v-calendar';
 import 'v-calendar/style.css';
 import { useTheme, Theme } from '@/composables/theme';
 
-const theme = useTheme();
-const statisticStore = useStatisticStore();
+const router = useRouter();
 
+const theme = useTheme();
 const isDark = computed(() => theme.theme.value === Theme.Dark);
-const attributes = ref<any[]>([
-  {
-    key: 'today',
-    highlight: true,
-    dates: new Date()
-  }
-]);
+
+const statisticStore = useStatisticStore();
+const activeDateList = computed(() => {
+  const date = statisticStore.statistic?.dateList;
+  const daySet = new Set();
+  (date.deteList || []).forEach((item: any) => {
+    const formatDay = formatDate(item.createdAt, 'yyyy-MM-dd');
+    if (!daySet.has(formatDay)) {
+      daySet.add(formatDay);
+    }
+  });
+  return Array.from(daySet);
+});
+const attributes: Ref<any[]> = computed(() => {
+  const list: any[] = [
+    {
+      key: 'today',
+      highlight: 'gray',
+      dates: new Date()
+    },
+    {
+      dot: true,
+      dates: activeDateList.value,
+    }
+  ];
+  return list;
+});
+const handleDayCilck = (date: any) => {
+  if (activeDateList.value.includes(date.id)) router.push({ path: `/date/${date.id}`});
+};
+const handleTagClick = (tag: any) => router.push({ path: `/tag/${tag.id}`});
 </script>
 
 <style lang="less" scoped>
