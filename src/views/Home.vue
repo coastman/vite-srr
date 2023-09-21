@@ -46,14 +46,18 @@
       </div>
     </div>
 
-    <button class="load-more" :disabled="articleStore.list.length === articleStore.total" @click="handleLoad">
+    <button 
+      class="load-more" 
+      :disabled="articleStore.list.length === articleStore.total" 
+      @click="handleLoad"
+    >
       <div class="background">
         <span class="left"></span>
         <span class="right"></span>
       </div>
       <div class="content">
         <span class="left">{{ articleStore.list.length }} / {{  articleStore.total }}</span>
-        <span class="right">加载更多</span>
+        <span class="right">{{ articleStore.list.length === articleStore.total ? '暂无更多' : '加载更多' }}</span>
       </div>
     </button>
   </main>

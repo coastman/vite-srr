@@ -7,7 +7,8 @@ import { useTagStore } from './tag';
 interface Ipage {
   page: number,
   pageSize: number,
-  categotyId?: number
+  categotyId?: number,
+  dateRange?: any[]
 }
 
 export const useArticleStore = defineStore('article', () => {

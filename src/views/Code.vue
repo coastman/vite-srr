@@ -1,9 +1,12 @@
 <template>
   <main class="code">
     <div class="code-desc">
-      <div class="backgroud" :style="{
+      <div 
+        class="backgroud" 
+        :style="{
         'background-image': `url(${currentCategory?.backgroundUrl})`
-      }">
+        }"
+      >
         <div class="desc">
           <i :class="currentCategory.icon"></i>
           <div> {{  currentCategory.name }} | {{ currentCategory.description }}</div>
