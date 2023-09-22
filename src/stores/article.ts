@@ -8,7 +8,8 @@ interface Ipage {
   page: number,
   pageSize: number,
   categotyId?: number,
-  dateRange?: any[]
+  dateRange?: any[],
+  tagId?: string | number | string[]
 }
 
 export const useArticleStore = defineStore('article', () => {
