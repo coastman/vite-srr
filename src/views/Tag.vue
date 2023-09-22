@@ -4,7 +4,7 @@
       <div 
         class="backgroud" 
         :style="{
-        'background-image': `url(${currentCategory?.backgroundUrl})`
+        'background-image': `url(${currentTag?.backgroundUrl})`
         }"
       >
         <div class="desc">
@@ -26,16 +26,13 @@
 import { computed } from 'vue';
 import ArticleList from '@/components/article/Index.vue';
 import { useRoute } from 'vue-router';
-import { useCategoryStore } from '@/stores/category';
 import { useArticleStore } from '@/stores/article';
 import { useTagStore } from '@/stores/tag';
 import { usePrefetch } from '@/composables/prefeth';
 
 const currentRoute = useRoute();
-const categoryStore = useCategoryStore();
 const articleStore = useArticleStore();
 const tagStore = useTagStore();
-const currentCategory = computed(() => (categoryStore.list || []).find(item => item?.code === 'tag'));
 const currentTag = computed(() => (tagStore.list || []).find(item => String(item.id) === currentRoute.params.id));
 
 usePrefetch(() => articleStore.fetch({
