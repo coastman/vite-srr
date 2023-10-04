@@ -9,6 +9,22 @@
       <i :class="['iconfont', item.iconfont]" />
       <span>{{ item.text }}</span>
     </router-link>
+    <a
+      class="menu-item"
+      href="https://github.com/coastman"
+      target="_blank"
+    >
+      <i class="iconfont icon-caozuo_chuangxiang" />
+      <span>Github</span>
+    </a>
+    <a
+      class="menu-item"
+      href="https://cloud.tencent.com"
+      target="_blank"
+    >
+      <i class="iconfont icon-dianzan" />
+      <span>AD</span>
+    </a>
   </div>
 </template>
 
@@ -40,6 +56,11 @@ const list = ref([
     text: '狂浪生',
     link: '/me',
     iconfont: 'icon-wo2'
+  },
+  {
+    text: '乐库',
+    link: '/music',
+    iconfont: 'icon-yingyongzhongxin'
   }
 ]);
 </script>

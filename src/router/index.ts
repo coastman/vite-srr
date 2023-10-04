@@ -7,6 +7,7 @@ const Comments = () => import('../views/Comments.vue');
 const Me = () => import('../views/Me.vue');
 const Date = () => import('../views/Date.vue');
 const Tag = () => import('../views/Tag.vue');
+const Music = () => import('../views/Music.vue');
 
 export const createRouter = () => {
   return _createRouter({
@@ -51,6 +52,11 @@ export const createRouter = () => {
         path: '/tag/:id',
         name: 'tag',
         component: Tag
+      },
+      {
+        path: '/music',
+        name: 'music',
+        component: Music
       }
     ]
   });
