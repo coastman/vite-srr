@@ -28,6 +28,7 @@
     "markdown-it": "^13.0.1",
     "pinia": "^2.0.32",
     "swiper": "^9.2.4",
+    "ua-parser-js": "^1.0.36",
     "v-calendar": "^3.0.3",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
@@ -40,6 +41,7 @@
     "@types/js-cookie": "^3.0.3",
     "@types/markdown-it": "^12.2.3",
     "@types/node": "^18.14.2",
+    "@types/ua-parser-js": "^0.7.37",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-typescript": "^11.0.2",
     "@vue/tsconfig": "^0.1.3",

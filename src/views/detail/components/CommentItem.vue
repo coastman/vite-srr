@@ -5,7 +5,21 @@
     </div>
 
     <div class="comment-content">
-      <div class="commentator">{{ commentItem.commentator }}</div>
+      <div class="commentator">
+        <span class="bold">{{ commentItem.commentator }}</span>
+        <span v-if="commentItem.ipLocation?.countryName" class="commentator-item">
+          <span class="emoji">{{ countryCodeToEmoji(commentItem.ipLocation.countryCode) }}</span>
+          <span class="ml-8">{{ commentItem.ipLocation?.countryName }}</span>
+          <span class="separator">•</span>
+          <span>{{ commentItem.ipLocation?.city }}</span>
+        </span>
+        <span v-if="ua?.os?.name" class="ml-8 commentator-item">
+          {{ ua?.os?.name }}
+        </span>
+        <span v-if="ua?.browser?.name" class="ml-8 commentator-item">
+          {{ ua?.browser?.name }}
+        </span>
+      </div>
       <div class="content">{{ commentItem.content }}</div>
       <div class="meta">
         <span class="mr-12"><i class="iconfont icon-shijian"></i>{{ timeAgo(commentItem.createdAt) }}</span>
@@ -49,7 +63,21 @@
               <img src="@/assets/img/default.jpeg" alt="">
             </div>
             <div class="comment-content">
-              <div class="commentator">{{ subItem.commentator }}</div>
+              <div class="commentator">
+                <span class="bold">{{ subItem.commentator }}</span>
+                <span v-if="subItem.ipLocation?.countryName" class="commentator-item">
+                  <span class="emoji">{{ countryCodeToEmoji(subItem.ipLocation.countryCode) }}</span>
+                  <span class="ml-8">{{ subItem.ipLocation?.countryName }}</span>
+                  <span class="separator">•</span>
+                  <span>{{ subItem.ipLocation?.city }}</span>
+                </span>
+                <span v-if="getUa(subItem).os" class="ml-8 commentator-item">
+                  {{ getUa(subItem).os.name }}
+                </span>
+                <span v-if="getUa(subItem).browser" class="ml-8 commentator-item">
+                  {{ getUa(subItem).browser.name }}
+                </span>
+              </div>
               <div class="content">{{ subItem.content }}</div>
               <div class="meta">
                 <span class="mr-12"><i class="iconfont icon-shijian"></i>{{ timeAgo(subItem.createdAt) }}</span>
@@ -98,6 +126,7 @@ import { ref, computed } from 'vue';
 import { likeComment } from '@/api';
 import { set } from '@/helper/storage';
 import { timeAgo } from '@/helper/time';
+import parser from 'ua-parser-js'
 
 const props = defineProps({
   commentItem: {
@@ -119,6 +148,23 @@ const handleReply = () => emit('handleReply');
 const handleCacelReply = (item: any) => {
   item.relayBoxShow = false;
 };
+
+const OFFSET = 127397;
+const countryCodeToEmoji = (countryCode: string): string => {
+  return countryCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET))
+}
+
+const getUa = computed(() => {
+  return (item) => {
+    if (item?.agent) return parser(item.agent);
+    return {};
+  }
+});
+
+const ua = computed(() => {
+  if (props?.commentItem?.agent) return parser(props.commentItem.agent);
+  return {};
+});
 
 const commentInput = ref(null);
 const handleReplyChild = (subItem: any) => {
@@ -150,6 +196,7 @@ const handleLike = async (type: number, item?: any) => {
   (props.likeOptions.commentIdList ? props.likeOptions.commentIdList : props.likeOptions.commentIdList = []).push(res?.data?.result?.refId);
   set('like', JSON.stringify(props.likeOptions))
 };
+
 const handleDown = () => {
 
 };
@@ -177,8 +224,25 @@ const handleDown = () => {
       font-size: 14px;
 
       .commentator {
-        font-weight: bolder;
         margin-bottom: 14px;
+
+        &-item {
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.5);
+
+          .emoji {
+            color: initial;
+          }
+        }
+  
+        .bold {
+          font-weight: bolder;
+          margin-right: 8px;
+        }
+        .separator {
+          margin-left: 4px;
+          margin-right: 4px;
+        }
       }
 
       > .content {

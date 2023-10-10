@@ -4,7 +4,7 @@
       <div 
         class="backgroud" 
         :style="{
-        'background-image': `url(${currentCategory?.backgroundUrl})`
+          'background-image': `url(${currentCategory?.backgroundUrl})`
         }"
       >
         <div class="desc">
@@ -51,6 +51,7 @@ const handleLoadMore = () => {};
     background-size: cover;
     height: 240px;
     color: #FFF;
+
     .desc {
       height: 100%;
       width: 100%;
