@@ -112,6 +112,7 @@
           :commentItem="item"
           :commentForm="commentForm"
           :likeOptions="likeOptions"
+          :dislikeOptions="dislikeOptions"
           @handleReply="handleReply(item)"
           @handleReplyChild="handleReplyChild(item)"
           @handleConfirm="handleConfirm"/>
@@ -218,11 +219,23 @@ const likeOptions = ref({
   commentIdList: []
 });
 
+const dislikeOptions = ref({
+  articleIdList: [],
+  commentIdList: []
+});
+
 onBeforeMount(() => { 
   user.value = JSON.parse(get('user') as string) || {};
   commentForm.commentator = user.value.commentator;
   commentForm.commentatorId = user.value.commentatorId;
-  likeOptions.value = JSON.parse(get('like') as string) || {};
+  likeOptions.value = JSON.parse(get('like') as string) || {
+    articleIdList: [],
+    commentIdList: []
+  };
+  dislikeOptions.value = JSON.parse(get('dislike') as string) || {
+    articleIdList: [],
+    commentIdList: []
+  };
 });
 
 const handleConfirm = async (comment?: any, subComment?: any) => {
@@ -248,7 +261,8 @@ const handleLike = async () => {
   const res = await likeArticle({
     refId: Number(currentRoute.params.id),
     type: 1,
-    status: 1
+    status: 1,
+    userId: commentForm.commentatorId
   });
   (likeOptions.value.articleIdList ? likeOptions.value.articleIdList : likeOptions.value.articleIdList = []).push(res?.data?.result?.refId);
   set('like', JSON.stringify(likeOptions.value))

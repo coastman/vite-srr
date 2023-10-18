@@ -9,3 +9,5 @@ export const addComment = async (data: any) => {
 };
 
 export const likeComment = async (data: any) => await http.post('/comment/like', data);
+
+export const dislikeComment = async (data: any) => await http.post('/comment/down', data);

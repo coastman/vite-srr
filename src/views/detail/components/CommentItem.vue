@@ -19,13 +19,14 @@
         <span v-if="ua?.browser?.name" class="ml-8 commentator-item">
           {{ ua?.browser?.name }}
         </span>
+        <span class="no commentator-item">#{{ commentItem.id }}</span>
       </div>
       <div class="content">{{ commentItem.content }}</div>
       <div class="meta">
         <span class="mr-12"><i class="iconfont icon-shijian"></i>{{ timeAgo(commentItem.createdAt) }}</span>
         <client-only>
-          <button class="mr-12" @click="handleLike(1)" :disabled="disabled(commentItem)">赞</button>
-          <!-- <button class="mr-12" @click="handleDown">踩</button> -->
+          <button class="mr-12" @click="handleLike(1)" :disabled="disabled(commentItem)">赞({{commentItem.likeCount}})</button>
+          <button class="mr-12" @click="handleDown(1)" :disabled="dislikeDisabled(commentItem)">踩({{ commentItem.dislikeCount }})</button>
         </client-only>
         <button v-if="!commentItem.relayBoxShow" @click="handleReply">回复</button>
         <button v-else @click="handleCacelReply(commentItem)">取消回复</button>
@@ -77,13 +78,19 @@
                 <span v-if="getUa(subItem).browser" class="ml-8 commentator-item">
                   {{ getUa(subItem).browser.name }}
                 </span>
+                <span class="no commentator-item">#{{ subItem.id }}</span>
               </div>
-              <div class="content">{{ subItem.content }}</div>
+              <div class="reply">
+                回复 #{{ subItem.parentId }} @{{ subItem.parentName }}
+              </div>
+              <div class="content">
+                {{ subItem.content }}
+              </div>
               <div class="meta">
                 <span class="mr-12"><i class="iconfont icon-shijian"></i>{{ timeAgo(subItem.createdAt) }}</span>
                 <client-only>
-                  <button class="mr-12" @click="handleLike(2, subItem)" :disabled="disabled(subItem)">赞</button>
-                  <!-- <button class="mr-12" @click="handleDown">踩</button> -->
+                  <button class="mr-12" @click="handleLike(2, subItem)" :disabled="disabled(subItem)">赞({{ subItem.likeCount }})</button>
+                  <button class="mr-12" @click="handleDown(2, subItem)" :disabled="dislikeDisabled(subItem)">踩({{ subItem.dislikeCount }})</button>
                 </client-only>
                 <button v-if="!(subItem.relayBoxShow && commentItem.replyChild)" @click="handleReplyChild(subItem)">回复</button>
                 <button v-else @click="handleCacelReply(subItem)">取消回复</button>`
@@ -123,7 +130,7 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-import { likeComment } from '@/api';
+import { likeComment, dislikeComment } from '@/api';
 import { set } from '@/helper/storage';
 import { timeAgo } from '@/helper/time';
 import parser from 'ua-parser-js'
@@ -138,6 +145,10 @@ const props = defineProps({
     default: () => {}
   },
   likeOptions: {
+    type: Object,
+    default: () => {}
+  },
+  dislikeOptions: {
     type: Object,
     default: () => {}
   }
@@ -184,21 +195,35 @@ const handleConfirm = (item: any, subItem?: any) => {
   emit('handleConfirm', item, subItem);
 };
 
-const disabled = computed(() => (comment: any) => props.likeOptions.commentIdList.includes(comment.id))
-
+console.log(props.dislikeOptions.commentIdList);
+const disabled = computed(() => (comment: any) => props.likeOptions.commentIdList.includes(comment.id));
+const dislikeDisabled = computed(() => (comment: any) => props.dislikeOptions.commentIdList.includes(comment.id));
 const handleLike = async (type: number, item?: any) => {
   const res = await likeComment({
     refId: type === 1 ? props.commentItem.id : item.id,
     type: 2,
-    status: 1
+    status: 1,
+    userId: props.commentForm.commentatorId
   });
   // eslint-disable-next-line vue/no-mutating-props
   (props.likeOptions.commentIdList ? props.likeOptions.commentIdList : props.likeOptions.commentIdList = []).push(res?.data?.result?.refId);
   set('like', JSON.stringify(props.likeOptions))
+  // eslint-disable-next-line vue/no-mutating-props
+  type === 1 ? props.commentItem.likeCount++ : item.likeCount++;
 };
 
-const handleDown = () => {
-
+const handleDown = async (type: number, item?: any) => {
+  const res = await dislikeComment({
+    refId: type === 1 ? props.commentItem.id : item.id,
+    type: 2,
+    downvote: 1,
+    userId: props.commentForm.commentatorId
+  });
+  // eslint-disable-next-line vue/no-mutating-props
+  (props.dislikeOptions.commentIdList ? props.dislikeOptions.commentIdList : props.dislikeOptions.commentIdList = []).push(res?.data?.result?.refId);
+  set('dislike', JSON.stringify(props.dislikeOptions))
+  // eslint-disable-next-line vue/no-mutating-props
+  type === 1 ? props.commentItem.dislikeCount++ : item.dislikeCount++;
 };
 </script>
 
@@ -223,8 +248,17 @@ const handleDown = () => {
       padding: 8px 12px;
       font-size: 14px;
 
+      .reply {
+        margin-bottom: 8px;
+      }
+
       .commentator {
         margin-bottom: 14px;
+
+        .no {
+          font-weight: bold;
+          float: right;
+        }
 
         &-item {
           font-size: 12px;
