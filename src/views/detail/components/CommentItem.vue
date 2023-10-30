@@ -195,7 +195,6 @@ const handleConfirm = (item: any, subItem?: any) => {
   emit('handleConfirm', item, subItem);
 };
 
-console.log(props.dislikeOptions.commentIdList);
 const disabled = computed(() => (comment: any) => props.likeOptions.commentIdList.includes(comment.id));
 const dislikeDisabled = computed(() => (comment: any) => props.dislikeOptions.commentIdList.includes(comment.id));
 const handleLike = async (type: number, item?: any) => {
