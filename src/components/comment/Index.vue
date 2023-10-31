@@ -3,12 +3,16 @@
     <topbar />
     <div class="divider"></div>
     <editor />
+    <div class="divider"></div>
+    <list />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import Topbar from './Topbar.vue';
 import Editor from './Editor.vue';
+import List from './List.vue';
 </script>
 
 <style lang="less" scoped>

@@ -1,6 +1,6 @@
 <template>
   <div class="input-box">
-    <div class="profile">
+    <div v-show="visible" class="profile">
       <input type="text" v-model="commentForm.commentator" placeholder="昵称 *">
       <input type="text" v-model="commentForm.email" placeholder="邮箱">
     </div>
@@ -9,7 +9,7 @@
       <div class="avatar">
         <img src="@/assets/img/default.jpeg" alt="">
       </div>
-      <div class="editor">
+      <div v-if="visible" class="editor">
         <div class="input-wrapper">
           <textarea
             v-model="commentForm.content"
@@ -17,26 +17,26 @@
             placeholder="请输入"
           ></textarea>
         </div>
-      </div>
-    </div>
-
-    <div class="tool-box">
-      <div class="tool">
-        <button class="emoji" title="emoji" type="button">
-          表 情
-          <div class="emoji-box">
-            <ul class="emoji-list">
-              <li v-for="(emoji, index) in EMOJIS" v-once class="item" :key="index">
-                <span>{{ emoji }}</span>
-              </li>
-            </ul>
+        <div class="tool-box">
+          <div class="tool">
+            <button class="emoji" title="emoji" type="button">
+              表 情
+              <div class="emoji-box">
+                <ul class="emoji-list">
+                  <li v-for="(emoji, index) in EMOJIS" v-once class="item" :key="index">
+                    <span>{{ emoji }}</span>
+                  </li>
+                </ul>
+              </div>
+            </button>
           </div>
-        </button>
+    
+          <button type="submit" class="submit" @click="handleSubmit">
+            发 布
+          </button>
+        </div>
       </div>
-
-      <button type="submit" class="submit" @click="handleSubmit">
-        发 布
-      </button>
+      <div v-else class="placeholder" @click="handleUseEditor">有趣的评论...</div>
     </div>
   </div>
 </template>
@@ -55,10 +55,9 @@ interface ICommentForm extends IUser {
 }
 
 const EMOJIS = [
-  ...['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡'],
-  ...['😤', '😭', '😱', '😳', '😵', '🌚'],
-  ...['🙏', '💪', '👌', '🤘', '👍', '👎', '👏'],
-  ...['🌻', '🌹', '💊', '🐶', '🐈', '✨', '❤️‍🔥', '💔', '💩', '👻', '🚩']
+  '😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡',
+  '😤', '😭', '😱', '😳', '😵', '🌚', '🙏', '💪', '👌', '🤘', '👍', '👎', '👏',
+  '🌻', '🌹', '💊', '🐶', '🐈', '✨', '❤️‍🔥', '💔', '💩', '👻', '🚩'
 ];
 
 const commentForm = reactive({
@@ -68,6 +67,10 @@ const commentForm = reactive({
   content: ''
 });
 
+const visible = ref(false);
+const handleUseEditor = () => {
+  visible.value = true;
+};
 </script>
 
 <style lang="less" scoped>
@@ -94,7 +97,7 @@ const commentForm = reactive({
   
     .avatar {
       width: 48px;
-      height: auto;
+      height: 48px;
       img {
         width: 100%;
       }
@@ -114,45 +117,53 @@ const commentForm = reactive({
         max-height: 200px;
         padding-bottom: 0px;
       }
-    }
-  }
-
-  .tool-box {
-    display: flex;
-    justify-content: space-between;
-    background-color: #dedede;
-    height: 32px;
-    line-height: 32px;
-    margin-left: 60px;
-    margin-top: -3px;
-    position: relative;
-    font-size: 14px;
-
-    .tool {
-      .emoji {
-        &:hover {
-          .emoji-box {
-            display: block;
-          }
-        }
-        .emoji-box {
-          display: none;
-          position: absolute;
-          left: 0;
-          top: 100%;
-          width: 100%;
-          background-color: #c2c2c2;
-
-          .emoji-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            font-size: 18px;
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
+      .tool-box {
+        display: flex;
+        justify-content: space-between;
+        background-color: #dedede;
+        height: 32px;
+        line-height: 32px;
+        margin-top: -3px;
+        position: relative;
+        font-size: 14px;
+    
+        .tool {
+          .emoji {
+            &:hover {
+              .emoji-box {
+                display: block;
+              }
+            }
+            .emoji-box {
+              display: none;
+              position: absolute;
+              left: 0;
+              top: 100%;
+              width: 100%;
+              background-color: #c2c2c2;
+    
+              .emoji-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                font-size: 18px;
+                display: grid;
+                grid-template-columns: repeat(12, 1fr);
+              }
+            }
           }
         }
       }
+    }
+
+    .placeholder {
+      background-color: #e8e8e8;
+      padding: 0px 12px;
+      font-size: 18px;
+      flex: 1;
+      margin-left: 10px;
+      display: flex;
+      align-items: center;
     }
   }
 }
