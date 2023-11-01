@@ -1,6 +1,6 @@
 <template>
   <div class="input-box">
-    <div v-show="visible" class="profile">
+    <div v-if="visible" class="profile">
       <input type="text" v-model="commentForm.commentator" placeholder="昵称 *">
       <input type="text" v-model="commentForm.email" placeholder="邮箱">
     </div>
@@ -54,6 +54,13 @@ interface ICommentForm extends IUser {
   content: string
 }
 
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    default: false
+  }
+});
+
 const EMOJIS = [
   '😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡',
   '😤', '😭', '😱', '😳', '😵', '🌚', '🙏', '💪', '👌', '🤘', '👍', '👎', '👏',
@@ -67,9 +74,9 @@ const commentForm = reactive({
   content: ''
 });
 
-const visible = ref(false);
+const emit = defineEmits(['update:visible']);
 const handleUseEditor = () => {
-  visible.value = true;
+  emit('update:visible', true);
 };
 </script>
 
@@ -141,6 +148,7 @@ const handleUseEditor = () => {
               top: 100%;
               width: 100%;
               background-color: #c2c2c2;
+              z-index: 1;
     
               .emoji-list {
                 list-style: none;

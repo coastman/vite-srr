@@ -2,17 +2,41 @@
   <div class="comment-box">
     <topbar />
     <div class="divider"></div>
-    <editor />
+    <editor v-model:visible="visible" />
     <div class="divider"></div>
-    <list />
+    <list
+      :list="list"
+      :reply-pid="state.replyPId" 
+      @reply="handleReply"
+      @cancelReply="handleCancelReply"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
+
+defineProps({
+  list: {
+    type: Array,
+    default: () => []
+  }
+})
+
 import Topbar from './Topbar.vue';
 import Editor from './Editor.vue';
 import List from './List.vue';
+
+const state = reactive({
+  replyPId: -1
+});
+const visible = ref(false);
+const handleReply = (id) => {
+  state.replyPId = id;
+}
+const handleCancelReply = () => {
+  state.replyPId = -1;
+}
 </script>
 
 <style lang="less" scoped>

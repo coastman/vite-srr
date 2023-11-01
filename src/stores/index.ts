@@ -12,5 +12,6 @@ export default () => {
     stores: import.meta.env.SSR ? useStores(pinia) : null,
     install: pinia.install,
     state: pinia.state,
+    instance: pinia
   }
 }

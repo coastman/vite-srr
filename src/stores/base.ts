@@ -5,6 +5,7 @@ import { useCommentStore } from './comment';
 import { useCategoryStore } from './category';
 import { useTagStore } from './tag';
 import { useStatisticStore } from './statistic';
+import { useClientStateStore } from './clientState';
 
 export const useStores = (pinia: Pinia) => ({
   article: useArticleStore(pinia),
@@ -13,4 +14,5 @@ export const useStores = (pinia: Pinia) => ({
   tag: useTagStore(pinia),
   category: useCategoryStore(pinia),
   statistic: useStatisticStore(pinia),
+  clientState: useClientStateStore(pinia)
 });

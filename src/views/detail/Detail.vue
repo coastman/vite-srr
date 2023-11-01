@@ -76,8 +76,8 @@
         </div>
       </div>
     </div>
-
-    <div class="comment">
+    <comment :list="commentStore.list" />
+    <!-- <div class="comment">
       <div class="input-comment">
         <div class="user-info" v-if="showUserInfo">
           <input type="text" v-model="commentForm.commentator" placeholder="昵称 *">
@@ -117,7 +117,7 @@
           @handleReplyChild="handleReplyChild(item)"
           @handleConfirm="handleConfirm"/>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -125,6 +125,7 @@
 import { get, set } from '@/helper/storage';
 import { addComment, likeArticle } from '@/api';
 import CommentItem from './components/CommentItem.vue';
+import Comment from '@/components/comment/Index.vue';
 import { ref, reactive, onBeforeMount, type Ref, computed } from 'vue';
 import { useArticleStore } from '@/stores/article';
 import { useCommentStore } from '@/stores/comment';
@@ -406,86 +407,86 @@ const handleLike = async () => {
   }
 }
 
-.comment {
-  padding: 10px 20px;
-  background-color: @module-bg-1;
+// .comment {
+//   padding: 10px 20px;
+//   background-color: @module-bg-1;
 
-  .user-info {
-    margin-bottom: 12px;
-    margin-left: 56px;
+//   .user-info {
+//     margin-bottom: 12px;
+//     margin-left: 56px;
 
-    input {
-      background-color: @comment-dark-1;
-      border: none;
-      outline: none;
-      padding: 6px 8px;
-      font-size: 14px;
-    }
+//     input {
+//       background-color: @comment-dark-1;
+//       border: none;
+//       outline: none;
+//       padding: 6px 8px;
+//       font-size: 14px;
+//     }
 
-    input + input {
-      margin-left: 12px;
-    }
-  }
+//     input + input {
+//       margin-left: 12px;
+//     }
+//   }
 
-  .post-box {
-    display: flex;
+//   .post-box {
+//     display: flex;
 
-    .avatar {
-      width: 48px;
-      height: auto;
+//     .avatar {
+//       width: 48px;
+//       height: auto;
 
-      img {
-        width: 100%;
-      }
-    }
+//       img {
+//         width: 100%;
+//       }
+//     }
 
-    .content {
-      padding: 8px 12px;
-      margin-left: 12px;
-      // color: #252933;
-      outline: none;
-      box-sizing: border-box;
-      resize: both;
-      background-color: @comment-dark-1;
-      min-height: 90px;
-      max-height: 200px;
-      overflow-y: scroll;
-      width: 100%;
-      font-size: 14px;
+//     .content {
+//       padding: 8px 12px;
+//       margin-left: 12px;
+//       // color: #252933;
+//       outline: none;
+//       box-sizing: border-box;
+//       resize: both;
+//       background-color: @comment-dark-1;
+//       min-height: 90px;
+//       max-height: 200px;
+//       overflow-y: scroll;
+//       width: 100%;
+//       font-size: 14px;
 
-      &:empty:before {
-        content: attr(placeholder);
-        color: @comment-placeholder-color;
-        font-size: 14px;
-      }
+//       &:empty:before {
+//         content: attr(placeholder);
+//         color: @comment-placeholder-color;
+//         font-size: 14px;
+//       }
 
-      &:focus {
-        content: none;
-      }
-    }
-  }
+//       &:focus {
+//         content: none;
+//       }
+//     }
+//   }
 
-  .comment-tools {
-    height: 30px;
-    background-color: @comment-dark-2;
-    margin-left: 56px;
+//   .comment-tools {
+//     height: 30px;
+//     background-color: @comment-dark-2;
+//     margin-left: 56px;
 
-    .submit {
-      float: right;
-      height: 30px;
-      line-height: 30px;
-      font-size: 14px;
-      padding: 0px 16px;
-      background-color: @comment-dark-3;
-    }
-  }
+//     .submit {
+//       float: right;
+//       height: 30px;
+//       line-height: 30px;
+//       font-size: 14px;
+//       padding: 0px 16px;
+//       background-color: @comment-dark-3;
+//     }
+//   }
 
-  .comment-list {
-    margin-top: 12px;
+//   .comment-list {
+//     margin-top: 12px;
 
-    &-item {
-      margin-top: 12px;
-    }
-  }
-}
+//     &-item {
+//       margin-top: 12px;
+//     }
+//   }
+// }
 </style>

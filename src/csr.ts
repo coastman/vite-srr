@@ -2,6 +2,7 @@ import { Theme } from './composables/theme';
 import { createSSRApp } from 'vue';
 import { createVueApp } from './main';
 // import VueProgressBar from '@aacassandra/vue3-progressbar';
+import { useClientStateStore } from './stores/clientState';
 
 export interface InitialSSRContext {
   theme: Theme
@@ -42,6 +43,8 @@ router.isReady().then(() => {
   app.mount('#app').$nextTick(() => {
     // @ts-ignore
     window.isHydrate = true;
+    const clientStateStore = useClientStateStore(pinia.instance);
+    clientStateStore.init();
     if (process.env.NODE_ENV === 'development') {
       const removeCssHotReloaded = () => {
         const devStyleList = document.querySelectorAll('.vite-dev-ssr');
