@@ -15,6 +15,9 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
+import Topbar from './Topbar.vue';
+import Editor from './Editor.vue';
+import List from './List.vue';
 
 defineProps({
   list: {
@@ -22,10 +25,6 @@ defineProps({
     default: () => []
   }
 })
-
-import Topbar from './Topbar.vue';
-import Editor from './Editor.vue';
-import List from './List.vue';
 
 const state = reactive({
   replyPId: -1

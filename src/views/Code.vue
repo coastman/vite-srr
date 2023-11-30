@@ -9,7 +9,7 @@
       >
         <div class="desc">
           <i :class="currentCategory.icon"></i>
-          <div> {{  currentCategory.name }} | {{ currentCategory.description }}</div>
+          <div> {{ currentCategory.name }} | {{ currentCategory.description }}</div>
         </div>
       </div>
     </div>

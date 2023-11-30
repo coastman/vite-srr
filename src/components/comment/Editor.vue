@@ -12,6 +12,7 @@
       <div v-if="visible" class="editor">
         <div class="input-wrapper">
           <textarea
+            ref="textareaRef"
             v-model="commentForm.content"
             class="editor-input"
             placeholder="请输入"
@@ -23,7 +24,13 @@
               表 情
               <div class="emoji-box">
                 <ul class="emoji-list">
-                  <li v-for="(emoji, index) in EMOJIS" v-once class="item" :key="index">
+                  <li
+                    v-for="(emoji, index) in EMOJIS"
+                    v-once
+                    class="item"
+                    :key="index"
+                    @click="insertEmoji(emoji)"
+                  >
                     <span>{{ emoji }}</span>
                   </li>
                 </ul>
@@ -73,6 +80,12 @@ const commentForm = reactive({
   email: '',
   content: ''
 });
+
+const textareaRef = ref(null);
+const insertEmoji = (emoji) => {
+  commentForm.content = `${commentForm.content}${emoji}`;
+  textareaRef.value.focus();
+};
 
 const emit = defineEmits(['update:visible']);
 const handleUseEditor = () => {

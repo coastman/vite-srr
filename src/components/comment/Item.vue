@@ -73,12 +73,14 @@ const props = defineProps({
 
 const OFFSET = 127397;
 const countryCodeToEmoji = (countryCode: string): string => {
-  return countryCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET))
+  return countryCode.toUpperCase()
+    .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET));
 };
 const userAgent = computed(() => {
   if (props?.commentItem?.agent) return parser(props.commentItem.agent);
   return {};
 });
+
 const emit = defineEmits(['reply', 'cancelReply']);
 const handleReply = (id) => {
   emit('reply', id);
